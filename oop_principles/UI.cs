@@ -35,15 +35,16 @@ namespace oop_principles
         
         public void CarMenu() {
 
-            Car car = new Car();
+            
             Console.WriteLine("\t----------------CAR----------------\n");
+            Console.WriteLine("No of doors(2|4)");
+            int doors = Int32.Parse(Console.ReadLine());
+            Vehicle car = new Car(doors);
+
             car.Engine = EngineMenu();
             Console.WriteLine("Color: white,black,gray,red,blue,yellow,burgundy");
-            car.Color= Console.ReadLine();
-            Console.WriteLine ("No of doors(2|4)");
-            car.DoorProperty = Int32.Parse(Console.ReadLine());
-
-            this.controller.CarProperty = car;
+            car.Color= Console.ReadLine();            
+            this.controller.VehicleProperty = car;
             Console.WriteLine("\n"+car.ToString());
             Console.WriteLine("Price:" +car.computePrice());
             Console.ReadKey();
@@ -51,14 +52,14 @@ namespace oop_principles
         }
         public void MotorcycleMenu() {
 
-            Motorcycle motorcycle = new Motorcycle();
+            Vehicle motorcycle = new Motorcycle();
 
             Console.WriteLine("\t----------------MOTORCYCLE----------------\n");
             motorcycle.Engine = EngineMenu();
             Console.WriteLine("Color: white,black,gray,red");
             motorcycle.Color = Console.ReadLine();
 
-            this.controller.MotorcycleProperty = motorcycle;
+            this.controller.VehicleProperty = motorcycle;
             Console.WriteLine("\n"+motorcycle.ToString());
             Console.WriteLine("Price:" + motorcycle.computePrice());
             Console.ReadKey();
@@ -66,7 +67,7 @@ namespace oop_principles
 
         public void TruckMenu() {
 
-            Truck truck = new Truck();
+            Vehicle truck = new Truck();
 
             Console.WriteLine("\t----------------TRUCK----------------\n");
             truck.Engine = EngineMenu();
@@ -75,7 +76,7 @@ namespace oop_principles
             Console.WriteLine("No of wheels 4|6|8");
             truck.Wheels= Int32.Parse(Console.ReadLine());
 
-            this.controller.TruckProperty = truck;
+            this.controller.VehicleProperty = truck;
             Console.WriteLine("\n"+truck.ToString());
             Console.WriteLine("Price:" + truck.computePrice());
             Console.ReadKey();

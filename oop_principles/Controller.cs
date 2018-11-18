@@ -6,26 +6,17 @@ namespace oop_principles
 {
     class Controller
     {
-        private Car car;
-        private Motorcycle motorcycle;
-        private Truck truck;
+        
+        private Vehicle vehicle;
 
         public Controller(){}
-        public Controller(Car car)
+        public Controller(Vehicle vehicle)
         {
-            this.car = car;
+            this.vehicle = vehicle;
         }
-        public Controller(Motorcycle motorcycle)
-        {
-            this.motorcycle = motorcycle;
-        }
-        public Controller(Truck truck)
-        {
-            this.truck = truck; ;
-        }
-        public Car CarProperty { get; set; }
-        public Motorcycle MotorcycleProperty { get; set; }
-        public Truck TruckProperty { get; set; }
+        
+        public Vehicle VehicleProperty { get; set; }
+        
 
     }
 }

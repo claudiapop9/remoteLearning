@@ -9,8 +9,14 @@ namespace oop_principles
         private int doors;
 
         public Car(){ base.Wheels = 4;}
-       
-    public Car(Engine engine, string color, int doors)
+
+        public Car(int doors)
+        {
+            this.doors = doors;
+            base.Wheels = 4;
+        }
+
+        public Car(Engine engine, string color, int doors)
         {
             base.Engine = engine;
             base.Color = color;
