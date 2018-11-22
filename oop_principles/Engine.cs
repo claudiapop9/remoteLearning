@@ -1,4 +1,5 @@
 ﻿using System;
+//@Paul unused directives
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace oop_principles
         private string fuel;
         private double price;
 
+        //@Paul fiind default poate sa lipseasca
         public Engine() {}
 
         public Engine(int dimension,string fuel,float price)
@@ -19,6 +21,7 @@ namespace oop_principles
             this.price = cost();          
         }
 
+        //@Paul nume de metoda PascalCase ;)
         public double cost() {
             try
             {
@@ -38,6 +41,7 @@ namespace oop_principles
             return 2500;
         }
 
+        //@Paul nume de prop PascalCase ;)
         public int dimProperty {
             get { return this.dimension; }
             set { this.dimension = value; }
