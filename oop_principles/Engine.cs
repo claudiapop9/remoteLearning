@@ -11,8 +11,8 @@ namespace oop_principles
         private string fuel;
         private double price;
 
-        //@Paul fiind default poate sa lipseasca
-        public Engine() {}
+        //@Paul fiind default poate sa lipseasca nvm mi-a scapat ceva; putea sa lipseasca in 2 situatii pe care le discutam la curs
+        //public Engine() {}
 
         public Engine(int dimension,string fuel,float price)
         {
