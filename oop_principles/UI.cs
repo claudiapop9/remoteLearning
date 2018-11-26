@@ -3,11 +3,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class UI
     {
-        private Controller controller = new Controller();
+        private Controller controller;
 
         public UI(){}
 
@@ -22,16 +22,11 @@ namespace oop_principles
         }
         public Engine EngineMenu() {
 
-            Engine engine = new Engine();
-
             Console.WriteLine("Introduce engine size cm:");
             int dim=Int32.Parse(Console.ReadLine());
-            engine.dimProperty=dim;
-
             Console.WriteLine("Fuel type:");
-            engine.fuelProperty = Console.ReadLine();         
-
-            return engine;
+            string fuel = Console.ReadLine();         
+            return new Engine(dim,fuel);
         }
         
         public void CarMenu() {
@@ -40,12 +35,11 @@ namespace oop_principles
             Console.WriteLine("\t----------------CAR----------------\n");
             Console.WriteLine("No of doors(2|4)");
             int doors = Int32.Parse(Console.ReadLine());
-            Vehicle car = new Car(doors);
-
-            car.Engine = EngineMenu();
+            Engine engine = EngineMenu();
             Console.WriteLine("Color: white,black,gray,red,blue,yellow,burgundy");
-            car.Color= Console.ReadLine();            
-            this.controller.VehicleProperty = car;
+            string color= Console.ReadLine();
+            Vehicle car = new Car(engine,color,doors);
+            this.controller=new Controller(car);
             Console.WriteLine("\n"+car.ToString());
             Console.WriteLine("Price:" +car.computePrice());
             Console.ReadKey();
@@ -53,14 +47,13 @@ namespace oop_principles
         }
         public void MotorcycleMenu() {
 
-            Vehicle motorcycle = new Motorcycle();
-
+            
             Console.WriteLine("\t----------------MOTORCYCLE----------------\n");
-            motorcycle.Engine = EngineMenu();
+            Engine engine = EngineMenu();
             Console.WriteLine("Color: white,black,gray,red");
-            motorcycle.Color = Console.ReadLine();
-
-            this.controller.VehicleProperty = motorcycle;
+            string color = Console.ReadLine();
+            Vehicle motorcycle = new Motorcycle(engine,color);
+            this.controller = new Controller(motorcycle);
             Console.WriteLine("\n"+motorcycle.ToString());
             Console.WriteLine("Price:" + motorcycle.computePrice());
             Console.ReadKey();
@@ -68,16 +61,14 @@ namespace oop_principles
 
         public void TruckMenu() {
 
-            Vehicle truck = new Truck();
-
             Console.WriteLine("\t----------------TRUCK----------------\n");
-            truck.Engine = EngineMenu();
+            Engine engine = EngineMenu();
             Console.WriteLine("Color: white,black,gray,red");
-            truck.Color = Console.ReadLine();
+            string color = Console.ReadLine();
             Console.WriteLine("No of wheels 4|6|8");
-            truck.Wheels= Int32.Parse(Console.ReadLine());
-
-            this.controller.VehicleProperty = truck;
+            int wheels= Int32.Parse(Console.ReadLine());
+            Vehicle truck = new Truck(engine, color, wheels);
+            this.controller=new Controller(truck);
             Console.WriteLine("\n"+truck.ToString());
             Console.WriteLine("Price:" + truck.computePrice());
             Console.ReadKey();

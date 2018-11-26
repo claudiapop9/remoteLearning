@@ -2,28 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class Truck : Vehicle
     {
         private int doors;
 
-        public Truck(){ this.doors = 2; }
-
-        public Truck(Engine engine, string color, int wheels)
+        public Truck(Engine engine, string color, int wheels):base(engine,color,wheels)
         {
-            base.Engine = engine;
-            base.Color = color;
-            base.Wheels = wheels;
-            this.doors = 2;
-
-            
+           this.doors = 2;
         }
 
         public override double computePrice()
         {
             double price = 5000;
-            price += Engine.priceProperty;
+            price += Engine.PriceProperty;
             price += Wheels * 500;
             
             if (Color == "white" | Color == "black" | Color == "gray")

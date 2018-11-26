@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class Engine
     {
@@ -11,18 +11,15 @@ namespace oop_principles
         private string fuel;
         private double price;
 
-        //@Paul fiind default poate sa lipseasca nvm mi-a scapat ceva; putea sa lipseasca in 2 situatii pe care le discutam la curs
-        //public Engine() {}
-
-        public Engine(int dimension,string fuel,float price)
+        public Engine(int dimension,string fuel)
         {
             this.dimension = dimension;
             this.fuel = fuel;
-            this.price = cost();          
+            this.price = Cost();          
         }
 
-        //@Paul nume de metoda PascalCase ;)
-        public double cost() {
+        
+        public double Cost() {
             try
             {
                 double price = dimension * 1.05;
@@ -41,18 +38,8 @@ namespace oop_principles
             return 2500;
         }
 
-        //@Paul nume de prop PascalCase ;)
-        public int dimProperty {
-            get { return this.dimension; }
-            set { this.dimension = value; }
-        }
-
-        public string fuelProperty {
-            get { return this.fuel; }
-            set { this.fuel = value; }
-        }
-
-        public double priceProperty {
+                        
+        public double PriceProperty {
             get { return this.price; }
             set { this.price = value; }
         }

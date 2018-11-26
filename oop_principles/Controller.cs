@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class Controller
     {
         
         private Vehicle vehicle;
 
-        public Controller(){}
         public Controller(Vehicle vehicle)
         {
             this.vehicle = vehicle;
         }
-        
-        public Vehicle VehicleProperty { get; set; }
-        
+              
 
     }
 }

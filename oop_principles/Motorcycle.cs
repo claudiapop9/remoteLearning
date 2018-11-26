@@ -2,24 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class Motorcycle : Vehicle
 
     {
-        public Motorcycle(){ base.Wheels = 2; }
-
-        public Motorcycle(Engine engine, string color)
+       
+        public Motorcycle(Engine engine, string color):base(engine,color,2)
         {
-            base.Engine = engine;
-            base.Color = color;
-            base.Wheels = 2;
+            
         }
 
         public override double computePrice()
         {
             double price = 1000;
-            price += Engine.priceProperty;
+            price += Engine.PriceProperty;
             if (Color == "white" | Color == "black" | Color == "gray")
             {
                 price += 200;

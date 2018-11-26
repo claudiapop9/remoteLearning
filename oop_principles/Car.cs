@@ -2,33 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace oop_principles
+namespace OopPrinciples
 {
     class Car : Vehicle
     {
         private int doors;
 
-        public Car(){ base.Wheels = 4;}
-
-        public Car(int doors)
+        
+        public Car(Engine engine, string color, int doors):base(engine,color,4)
         {
             this.doors = doors;
-            base.Wheels = 4;
-        }
-
-        public Car(Engine engine, string color, int doors)
-        {
-            base.Engine = engine;
-            base.Color = color;
-            base.Wheels = 4;
-            this.doors = doors;
-
         }
 
         public override double computePrice()
         {
             double price = 2000;
-            price += Engine.priceProperty;
+            price += Engine.PriceProperty;
             price += doors * 1000;
             if (Color == "white" | Color == "black" | Color == "gray") {
                 price += 200;
@@ -40,12 +29,6 @@ namespace oop_principles
 
             return price;
 
-        }
-
-        public int DoorProperty
-        {
-            get { return this.doors; }
-            set { this.doors = value; }
         }
 
         public override string ToString()
