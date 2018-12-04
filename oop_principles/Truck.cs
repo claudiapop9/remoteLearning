@@ -32,6 +32,7 @@ namespace OopPrinciples
         }
         public override string ToString()
         {
+            //@Paul ToString casting unnecessary .. check in all project pls
             string str = "Your truck has:\n\n";
             str += Engine.ToString() + "\n";
             str += "Color: " + Color;

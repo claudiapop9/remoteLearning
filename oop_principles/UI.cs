@@ -1,5 +1,5 @@
 ﻿using System;
-//@Paul  unused....
+//@Paul  unused....in all project
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,8 +7,10 @@ namespace OopPrinciples
 {
     class UI
     {
+        //@Paul what's its purpose?  
         private Controller controller;
 
+        //@Paul doesn't have to be explicit
         public UI(){}
 
         public void MainMenu() {
@@ -74,6 +76,8 @@ namespace OopPrinciples
             Console.ReadKey();
 
         }
+
+        //@Paul PascalCase maybe?...in all project pls :D
 
         public void run() {
             MainMenu();
