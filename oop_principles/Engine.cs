@@ -1,7 +1,5 @@
 ﻿using System;
-//@Paul unused directives
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace OopPrinciples
 {
@@ -46,8 +44,8 @@ namespace OopPrinciples
 
         public override string ToString()
         {
-            string str = "Engine properties:\n";
-            str += "engine size: " + this.dimension.ToString()+" cm^3\n";
+            string str = "engine properties:\n";
+            str += "engine size: " + this.dimension.ToString() + " cm^3\n";
             str += "fuel: " + this.fuel.ToString();
             return str;
         }

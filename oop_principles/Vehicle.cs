@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace OopPrinciples
 {
     abstract class Vehicle
@@ -18,7 +15,7 @@ namespace OopPrinciples
             this.no_wheels = no_wheels; 
         }
 
-        public abstract double computePrice();
+        public abstract double ComputePrice();
 
         public string Color { get => color; set => color = value; }
         public int Wheels { get => no_wheels; set => no_wheels = value; }

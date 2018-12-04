@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace OopPrinciples
 {
@@ -10,10 +8,12 @@ namespace OopPrinciples
 
         public Truck(Engine engine, string color, int wheels):base(engine,color,wheels)
         {
-           this.doors = 2;
+           this.Doors = 2;
         }
 
-        public override double computePrice()
+        public int Doors { get => doors; set => doors = value; }
+
+        public override double ComputePrice()
         {
             double price = 5000;
             price += Engine.PriceProperty;
@@ -32,12 +32,11 @@ namespace OopPrinciples
         }
         public override string ToString()
         {
-            //@Paul ToString casting unnecessary .. check in all project pls
             string str = "Your truck has:\n\n";
             str += Engine.ToString() + "\n";
             str += "Color: " + Color;
             str += "\nWheels: " + Wheels.ToString();
-            str += "\nDoors: " + this.doors.ToString();
+            str += "\nDoors: " + this.Doors.ToString();
 
             return str;
         }

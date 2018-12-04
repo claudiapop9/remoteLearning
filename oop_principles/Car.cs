@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
 
 namespace OopPrinciples
 {
@@ -14,7 +12,7 @@ namespace OopPrinciples
             this.doors = doors;
         }
 
-        public override double computePrice()
+        public override double ComputePrice()
         {
             double price = 2000;
             price += Engine.PriceProperty;

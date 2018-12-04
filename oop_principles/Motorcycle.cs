@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace OopPrinciples
 {
     class Motorcycle : Vehicle
@@ -13,7 +10,7 @@ namespace OopPrinciples
             
         }
 
-        public override double computePrice()
+        public override double ComputePrice()
         {
             double price = 1000;
             price += Engine.PriceProperty;
