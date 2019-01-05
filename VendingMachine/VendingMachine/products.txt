@@ -1,3 +1,3 @@
-﻿1 CocaCola 10 5
-2 Lays 15 4
-3 Sprite 2 7
+1 CocaCola 10 5
+2 Lays 5 3
+3 SevenDays 4 25

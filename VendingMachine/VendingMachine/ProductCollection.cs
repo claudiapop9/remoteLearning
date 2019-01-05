@@ -7,10 +7,10 @@ namespace VendingMachine
         private Dictionary<int, Product> products=new Dictionary<int, Product>();
 
 
-        public void AddProduct(Product product)
+        public void AddProduct(int id,Product product)
         {
 
-            products.Add(product.IdProperty, product);
+            products.Add(id, product);
         }
 
         public void UpdateProduct(int productId, string name, int quantity, double price)
@@ -29,7 +29,6 @@ namespace VendingMachine
             if (products.ContainsKey(productId))
             {
                 products[productId].DecreaseQuantity();
-
             }
 
         }
@@ -43,12 +42,15 @@ namespace VendingMachine
         {
             return products[id];
         }
-
+        public Dictionary<int, Product> GetProducts()
+        {
+            return this.products;
+        }
         public override string ToString()
         {
             string str="";
             foreach (int id in products.Keys) {
-                str += id + " " + products[id].NameProperty+" "+ products[id].QuantityProperty+"\n";
+                str += id +" "+ products[id]+"\n";
             }
             return str;
         }

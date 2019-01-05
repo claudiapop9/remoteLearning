@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 
 namespace VendingMachine
 {
@@ -7,19 +7,14 @@ namespace VendingMachine
     {
 
         private ProductCollection productCollection = new ProductCollection();
-        private IPayment payment;
-        private double vendingMachineMoney = 0;
-
+        private string filename;
+               
         public Controller(string filename)
         {
+            this.filename = filename;
             ReadFromFile(filename);
-
         }
-        public Controller(string filename, IPayment payment)
-        {
-            ReadFromFile(filename);
-            this.payment = payment;
-        }
+        
 
         public void ReadFromFile(string filename)
         {
@@ -28,37 +23,66 @@ namespace VendingMachine
 
             while ((line = file.ReadLine()) != null)
             {
-                line.Split(' ');
-                int productId = line[0];
-                string name = line[1].ToString();
-                int quantity = line[2];
-                double price = line[3];
-                Product p = new Product(productId, name, quantity, price);
-                productCollection.AddProduct(p);
+                string[] copyLine=line.Split(' ');
+                
+                int productId = Int32.Parse(copyLine[0]);
+                string name = copyLine[1];
+                
+                int quantity = Int32.Parse(copyLine[2]);
+                double price = Double.Parse(copyLine[3]);
+                Product p = new Product(name, quantity, price);
+                productCollection.AddProduct(productId,p);
             }
-            Console.Write(this.productCollection);
-            Console.ReadKey();
             file.Close();
         }
 
-        public void BuyProduct(int id)
-        {
+             
 
-            double productPrice = productCollection.GetProductByKey(id).PriceProperty;
+        public bool BuyProduct(int productId, double introducedMoney)
+        {
+            double productPrice = productCollection.GetProductByKey(productId).PriceProperty;
+            Payment payment = new Payment(introducedMoney);
             if (payment.IsEnough(productPrice))
             {
-                productCollection.DecreaseProductQuantity(id);
-                payment.TakeMoney(productPrice);
+                productCollection.DecreaseProductQuantity(productId);
+                return true;
             }
+            else { return false; }
+        }
+
+        public void AddProductToList(int productId, string name, int quantity, double price)
+        {
+            Product product = new Product(name, quantity, price);
+            this.productCollection.AddProduct(productId, product);
+            WriteToFile(filename);
+        }
+
+        public void UpdateProductInList(int productId, string name, int quantity, double price) {
+            this.productCollection.UpdateProduct(productId, name, quantity, price);
+            WriteToFile(filename);
+        }
+
+        public void DeleteProductFromList(int productId)
+        {
+            this.productCollection.RemoveProduct(productId);
+            WriteToFile(filename);
+        }
+
+        public void WriteToFile(string filename)
+        {
+            Dictionary<int, Product> products = this.productCollection.GetProducts();
+            string text = "";
+            foreach (int id in products.Keys)
+            {
+                text += id + " " + products[id].NameProperty + " " + products[id].QuantityProperty + " " + products[id].PriceProperty + "\n";
+            }
+            System.IO.File.WriteAllText(filename, text);
         }
 
         public ProductCollection GetProductCollection()
         {
             return productCollection;
         }
-
-
-
 
     }
 }
