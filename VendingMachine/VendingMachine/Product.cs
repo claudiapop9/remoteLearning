@@ -1,16 +1,17 @@
 ﻿
-
 namespace VendingMachine
 {
     class Product
     {
-
+        private int id;
         private string name;
         private int quantity;
         private double price;
 
-        public Product(string name, int quantity, double price)
+
+        public Product(int id,string name, int quantity, double price)
         {
+            this.Id = id;
             this.name = name;
             this.quantity = quantity;
             this.price = price;
@@ -37,9 +38,12 @@ namespace VendingMachine
             get { return this.price; }
             set { this.price = value; }
         }
+
+        public int Id { get => id; set => id = value; }
+
         public override string ToString()
         {
-            return "Produs:" + this.name + " quantity: " + quantity + " price: " + price;
+            return "Produs:" + this.id + " " + this.name + " quantity: " + quantity + " price: " + price;
 
         }
     }

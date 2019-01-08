@@ -1,11 +1,11 @@
 ﻿using System;
-
+using System.Collections.Generic;
 
 namespace VendingMachine
 {
     class UI
     {
-        Controller ctrl = new Controller(@"E:\computer\Documents\iQuest\VendingMachine\VendingMachine\products.txt");
+        Controller ctrl = new Controller();
 
         public void Run()
         {
@@ -35,7 +35,13 @@ namespace VendingMachine
         }
         public void ShowProductList()
         {
-            Console.Write(ctrl.GetProductCollection());
+            List<Product> products = ctrl.GetProductsList();
+
+            for (int i = 0; i < products.Count; i++)
+            {
+                Console.WriteLine(products[i]);
+            }
+
             Console.ReadKey();
         }
 
@@ -61,43 +67,44 @@ namespace VendingMachine
 
         public void ModifyProductList()
         {
-            Tuple<int, string, int, double> tuple;
-            Console.WriteLine("Press 1 to add product\n Press 2 to update product\n Press 3 to delete product");
-            string cmd=Console.ReadLine();
+            Tuple<string, int, double> tuple;
+            Console.WriteLine(" Press 1 to add product\n Press 2 to update product\n Press 3 to delete product");
+            string cmd = Console.ReadLine();
             switch (cmd)
             {
                 case "1":
-                    tuple=AskDetails();
-                    ctrl.AddProductToList(tuple.Item1,tuple.Item2,tuple.Item3,tuple.Item4);
+                    tuple = AskDetails();
+                    ctrl.AddProductToList(tuple.Item1, tuple.Item2, tuple.Item3);
                     ShowProductList();
                     break;
                 case "2":
+                    Console.WriteLine("Id:");
+                    int id = Int32.Parse(Console.ReadLine());
                     tuple = AskDetails();
-                    ctrl.UpdateProductInList(tuple.Item1, tuple.Item2, tuple.Item3, tuple.Item4);
+                    ctrl.UpdateProductInList(id, tuple.Item1, tuple.Item2, tuple.Item3);
                     ShowProductList();
                     break;
                 case "3":
                     Console.WriteLine("Introduce id:");
-                    int id =Int32.Parse(Console.ReadLine());
-                    ctrl.DeleteProductFromList(id);
+                    int id2 = Int32.Parse(Console.ReadLine());
+                    ctrl.DeleteProductFromList(id2);
                     ShowProductList();
                     break;
             }
 
         }
 
-        public Tuple<int, string, int, double> AskDetails()
+        public Tuple<string, int, double> AskDetails()
         {
-            Console.WriteLine("Id:");
-            int id = Int32.Parse(Console.ReadLine());
+
             Console.WriteLine("Name:");
             string name = Console.ReadLine();
             Console.WriteLine("Quantity:");
             int quantity = Int32.Parse(Console.ReadLine());
             Console.WriteLine("Price:");
             double price = Double.Parse(Console.ReadLine());
-           
-            return new Tuple<int, string, int, double>(id,name,quantity,price);
+
+            return new Tuple<string, int, double>(name, quantity, price);
         }
     }
 }

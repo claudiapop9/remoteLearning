@@ -1,3 +1,0 @@
-1 CocaCola 10 5
-2 Lays 5 3
-3 SevenDays 4 25
