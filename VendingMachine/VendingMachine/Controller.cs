@@ -5,20 +5,44 @@ namespace VendingMachine
 {
     class Controller
     {
+        private Dictionary<double, int> introducedMoney = new Dictionary<double, int>() { { 0.5, 0 }, { 1, 0 }, { 5, 0 }, { 10, 0 } };
+
+        private double totalMoney = 0;
 
         private ProductCollection productCollection = new ProductCollection();
 
-        public bool BuyProduct(int productId, double introducedMoney)
+        public void addMoney(double money)
+        {
+            if (introducedMoney.ContainsKey(money))
+            {
+                introducedMoney[money] += 1;
+                totalMoney += money;
+            }
+            else
+            {
+                throw new Exception("Money not accepted");
+            }
+        }
+
+        public bool IsEnoughMoney(int productId) {
+            double productPrice = productCollection.GetProductPriceByKey(productId);
+            return totalMoney >= productPrice;
+        }
+
+        public bool BuyProductCash(int productId)
         {
             double productPrice = productCollection.GetProductPriceByKey(productId);
-            Payment payment = new Payment(introducedMoney);
-            if (payment.IsEnough(productPrice))
+            IPayment payment = new CashPayment(introducedMoney,totalMoney);
+            
+            if (productPrice<=totalMoney)
             {
                 productCollection.DecreaseProductQuantity(productId);
+                payment.Pay(productPrice, totalMoney);
                 return true;
             }
-            else { return false; }
+            return false;
         }
+        
 
         public void AddProductToList(string name, int quantity, double price)
         {

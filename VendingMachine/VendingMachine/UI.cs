@@ -26,7 +26,7 @@ namespace VendingMachine
                     ShowProductList();
                     break;
                 case "2":
-                    ShopMenu();
+                    ShopMenuCash();
                     break;
                 case "3":
                     ModifyProductList();
@@ -45,22 +45,39 @@ namespace VendingMachine
             Console.ReadKey();
         }
 
-        public void ShopMenu()
+        public void ShopMenuCash()
         {
             ShowProductList();
             Console.WriteLine("Product id:");
             int id = Int32.Parse(Console.ReadLine());
             Console.WriteLine("Introduce money:");
-            double introducedMoney = Double.Parse(Console.ReadLine());
-            if (ctrl.BuyProduct(id, introducedMoney))
+            double money = Double.Parse(Console.ReadLine());
+            ctrl.addMoney(money);
+            
+            if (ctrl.IsEnoughMoney(id))
             {
-                Console.WriteLine("Product bought successfully :D");
-                ShowProductList();
+                if (ctrl.BuyProductCash(id))
+                {
+                    Console.WriteLine("Product bought successfully :D");
+                    ShowProductList();
+                }
+                else
+                {
+                    Console.WriteLine("The Product wasn't bought :( \n");
+                    Console.ReadKey();
+                }
+
             }
             else
             {
-                Console.WriteLine("Not enought money :( \n");
-                Console.ReadKey();
+                while (ctrl.IsEnoughMoney(id))
+                {
+                    Console.WriteLine("Not enough, introduce money:");
+                    double money2 = Double.Parse(Console.ReadLine());
+                    ctrl.addMoney(money);
+                }
+
+
             }
 
         }

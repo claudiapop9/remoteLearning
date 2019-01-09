@@ -33,15 +33,12 @@ namespace VendingMachine
 
         public void UpdateProduct(int productId, string name, int quantity, double price)
         {
-            DataTable dataTable = ds.Tables[0];
-            DataRow dr = dataTable.Select(("ProductsId=\'" + (productId.ToString() + "\'")))[0];
-            int rowIndex = dataTable.Rows.IndexOf(dr);
 
             da.UpdateCommand = new SqlCommand("UPDATE Products SET ProductName=@name, Quantity=@quantity, Price=@price where ProductsId=@id", cs);
             da.UpdateCommand.Parameters.Add("@name", SqlDbType.VarChar).Value = name;
             da.UpdateCommand.Parameters.Add("@quantity", SqlDbType.Int).Value = quantity;
             da.UpdateCommand.Parameters.Add("@price", SqlDbType.Float).Value = price;
-            da.UpdateCommand.Parameters.Add("@id", SqlDbType.Int).Value = ds.Tables[0].Rows[rowIndex][0];
+            da.UpdateCommand.Parameters.Add("@id", SqlDbType.Int).Value = productId;
 
             cs.Open();
             da.UpdateCommand.ExecuteNonQuery();
@@ -51,21 +48,21 @@ namespace VendingMachine
 
         public void DecreaseProductQuantity(int productId)
         {
-            string name = ds.Tables[0].Rows[productId - 1][1].ToString();
-            int quantity = -1 + Int32.Parse(ds.Tables[0].Rows[productId - 1][2].ToString());
-            double price = Double.Parse(ds.Tables[0].Rows[productId][2].ToString());
+            DataTable dataTable = ds.Tables[0];
+            DataRow dr = dataTable.Select(("ProductsId=\'" + (productId.ToString() + "\'")))[0];
+            int rowIndex = dataTable.Rows.IndexOf(dr);
+
+            string name = ds.Tables[0].Rows[rowIndex][1].ToString();
+            int quantity = -1 + Int32.Parse(ds.Tables[0].Rows[rowIndex][2].ToString());
+            double price = Double.Parse(ds.Tables[0].Rows[rowIndex][2].ToString());
             UpdateProduct(productId, name, quantity, price);
 
         }
 
         public void RemoveProduct(int productId)
         {
-            DataTable dataTable = ds.Tables[0];
-            DataRow dr = dataTable.Select(("ProductsId=\'" + (productId.ToString() + "\'")))[0];
-            int rowIndex = dataTable.Rows.IndexOf(dr);
-
             da.DeleteCommand = new SqlCommand("DELETE FROM Products WHERE ProductsID=@id", cs);
-            da.DeleteCommand.Parameters.Add("@id", SqlDbType.Int).Value = ds.Tables[0].Rows[rowIndex][0];
+            da.DeleteCommand.Parameters.Add("@id", SqlDbType.Int).Value = productId;
 
             cs.Open();
             da.DeleteCommand.ExecuteNonQuery();
@@ -77,7 +74,10 @@ namespace VendingMachine
 
         public double GetProductPriceByKey(int id)
         {
-            double price = Double.Parse(ds.Tables[0].Rows[id - 1][3].ToString());
+            DataTable dataTable = ds.Tables[0];
+            DataRow dr = dataTable.Select(("ProductsId=\'" + (id.ToString() + "\'")))[0];
+            int rowIndex = dataTable.Rows.IndexOf(dr);
+            double price = Double.Parse(ds.Tables[0].Rows[rowIndex][3].ToString());
             return price;
         }
 
