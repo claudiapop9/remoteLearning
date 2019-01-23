@@ -6,6 +6,7 @@ namespace VendingMachine
     class UI
     {
         Controller ctrl = new Controller();
+        List<double> acceptedDenominations = new List<double>() { 10, 5, 1, 0.5 };
 
         public void Run()
         {
@@ -26,7 +27,7 @@ namespace VendingMachine
                     ShowProductList();
                     break;
                 case "2":
-                    ShopMenuCash();
+                    WayOfPayment();
                     break;
                 case "3":
                     ModifyProductList();
@@ -45,16 +46,42 @@ namespace VendingMachine
             Console.ReadKey();
         }
 
+        public void WayOfPayment()
+        {
+            string str = "-----------Payment----------------\n\n";
+            str += "1.Cash\n";
+            str += "2.By Card\n";
+            Console.WriteLine(str);
+            string c = Console.ReadLine();
+            switch (c)
+            {
+                case "1":
+                    ShopMenuCash();
+                    break;
+                case "2":
+                    ShopMenuCard();
+                    break;
+            }
+        }
         public void ShopMenuCash()
         {
             ShowProductList();
             Console.WriteLine("Product id:");
             int id = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("Introduce money:");
-            double money = Double.Parse(Console.ReadLine());
-            ctrl.addMoney(money);
-            
-            if (ctrl.IsEnoughMoney(id))
+            while (!ctrl.IsEnoughCashMoney(id))
+            {
+                Console.WriteLine("Introduce money:");
+                double money = Double.Parse(Console.ReadLine());
+                if (IsValidMoney(money))
+                {
+                    ctrl.addMoney(money);
+                }
+                else {
+                    throw new Exception("Money not accepted");
+                }
+
+            }
+            if (ctrl.IsEnoughCashMoney(id))
             {
                 if (ctrl.BuyProductCash(id))
                 {
@@ -66,20 +93,24 @@ namespace VendingMachine
                     Console.WriteLine("The Product wasn't bought :( \n");
                     Console.ReadKey();
                 }
-
             }
-            else
-            {
-                while (ctrl.IsEnoughMoney(id))
-                {
-                    Console.WriteLine("Not enough, introduce money:");
-                    double money2 = Double.Parse(Console.ReadLine());
-                    ctrl.addMoney(money);
-                }
-
-
+        }
+        public bool IsValidMoney(double money) {
+            if (acceptedDenominations.Contains(money)) {
+                return true;
             }
+            return false;
+        }
 
+        public void ShopMenuCard() {
+            ShowProductList();
+            Console.WriteLine("Product id:");
+            int id = Int32.Parse(Console.ReadLine());
+            Console.WriteLine("CardNo:");
+            string cardNo = Console.ReadLine();
+            Console.WriteLine("PIN:");
+            string pin= Console.ReadLine();
+            ctrl.BuyProductByCard(id, cardNo, pin);
         }
 
         public void ModifyProductList()
@@ -108,7 +139,6 @@ namespace VendingMachine
                     ShowProductList();
                     break;
             }
-
         }
 
         public Tuple<string, int, double> AskDetails()

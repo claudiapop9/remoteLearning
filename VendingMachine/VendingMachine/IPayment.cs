@@ -2,6 +2,7 @@
 {
     interface IPayment
     {
-        void Pay(double cost,double money); 
+        void Pay(double cost);
+        bool IsEnough(double cost);
     }
 }
