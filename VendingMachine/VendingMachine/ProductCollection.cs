@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Data.Entity;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace VendingMachine
 {
     class ProductCollection
     {
+        private string filePath = @"E:\computer\Documents\iQuest\remotelearning\VendingMachine\currentDb.txt";
+        private string filePathAllStates = @"E:\computer\Documents\iQuest\remotelearning\VendingMachine\all.txt";
+
         public void AddProduct(Product p)
         {
             using (VMachineEntities db = new VMachineEntities())
@@ -15,6 +20,7 @@ namespace VendingMachine
                 db.Products.Add(p);
                 db.SaveChanges();
             }
+            PersistData();
         }
 
         public void UpdateProduct(Product p)
@@ -24,7 +30,7 @@ namespace VendingMachine
                 db.Entry(p).State = EntityState.Modified;
                 db.SaveChanges();
             }
-
+            PersistData();
         }
 
         public void DecreaseProductQuantity(int productId)
@@ -44,6 +50,7 @@ namespace VendingMachine
                 db.Products.Remove(p);
                 db.SaveChanges();
             }
+            PersistData();
         }
 
         public double GetProductPriceByKey(int id)
@@ -65,6 +72,34 @@ namespace VendingMachine
                 products = db.Products.ToList<Product>();
             }
             return products;
+        }
+        public void PersistData()
+        {
+            WriteCurrentState(filePath);
+            AppendCurrentState(filePathAllStates);
+        }
+        public void WriteCurrentState(string filePath)
+        {
+
+            using (StreamWriter myFile = new StreamWriter(filePath))
+            {
+                List<Product> products = GetProducts();
+                foreach (Product p in products)
+                {
+                    myFile.WriteLine(JsonConvert.SerializeObject(p));
+                }
+
+            }
+        }
+        public void AppendCurrentState(string filePath)
+        {
+            List<Product> products = GetProducts();
+            foreach (Product p in products)
+            {
+                File.AppendAllLines(filePath, new[] { JsonConvert.SerializeObject(p) });
+
+            }
+
         }
 
     }
