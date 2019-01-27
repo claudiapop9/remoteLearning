@@ -4,18 +4,28 @@ namespace BadOpp
 {
     class Dog : IAnimal
     {
-        public int HairLength;
-        private int noChildren;
+        public String name;
+        public Dog(){}
+
+        public Dog(string name)
+        {
+            this.name = name;
+        }
+
+        public void Eat()
+        {
+            System.Console.WriteLine("The dog is eating");
+        }
 
         public void Run()
         {
             Console.Write("Dogs run fast.");
         }
 
-        //it should have been abstract
-        public bool HasChild()
+        public void Sleep()
         {
-            return noChildren > 0;
+            System.Console.WriteLine("The dog is sleeping");
         }
     }
+        
 }

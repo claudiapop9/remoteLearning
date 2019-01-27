@@ -2,24 +2,29 @@
 {
     class Fish : IAnimal
     {
-        private int noChildren;
-
-        public bool Eat(string food)
+        //Single Resposability principle violation-- method level
+        public void Eat()
         {
-            return food.Equals("fish food");
+            System.Console.WriteLine("fish eat");
+                     
+            System.Console.WriteLine("One thing..");
+            
+            //+ is doing another thing...
+            //+ and another...
+            //+ and another...
+            // and another...
+
         }
 
-        //bad abstraction
+        //--Liskov Substitution Principle
         public void Run()
         {
-            
+            System.Console.WriteLine("Fish can't run");
         }
-        //it should have been abstract
-        public bool HasChild()
+
+        public void Sleep()
         {
-            return noChildren > 0;
+            System.Console.WriteLine("The fish is sleeping");
         }
-
-
     }
 }
