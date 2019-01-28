@@ -8,20 +8,10 @@ namespace VendingMachine
 {
     class CashPayment : IPayment
     {
-        private List<CashMoney> introducedMoney;
+        List<double> acceptedDenominations = new List<double>() { 10, 5, 1, 0.5 };
+        private List<CashMoney> introducedMoney = new List<CashMoney>();
         double totalMoney=0;
-
-        public CashPayment(List<CashMoney> introducedMoney)
-        {
-            this.introducedMoney = introducedMoney;
-            foreach (CashMoney entry in introducedMoney)
-            {
-                double value = (double)entry.MoneyValue;
-                int quantity = (Int32)entry.Quantity;
-                this.totalMoney += value*quantity;
-            }
-            
-        }
+        
         public void Pay(double cost)
         {
 
@@ -45,10 +35,38 @@ namespace VendingMachine
                 GiveChange(totalMoney - cost);
             }
         }
+
         public bool IsEnough(double cost)
         {
+            AskForMoney(cost);
             return cost <= totalMoney;
         }
+
+        public void AskForMoney(double cost) {
+           
+            Console.WriteLine("Introduce money:");
+            double money = Double.Parse(Console.ReadLine());
+            addMoney(money);
+            while (totalMoney < cost)
+            {
+                Console.WriteLine($"Not enough.Introduce more: {cost - totalMoney}:");
+                money = Double.Parse(Console.ReadLine());
+            };
+
+        }
+
+        public void addMoney(double money)
+        {
+            if (acceptedDenominations.Contains(money))
+            {
+                CashMoney cashMoney = new CashMoney(money, 1);
+                introducedMoney.Add(cashMoney);
+                totalMoney += money;
+            }
+            else
+            { throw new Exception("Money not accepted"); }
+        }
+
 
         public void UpdateMoney(double value, int quantity)
         {

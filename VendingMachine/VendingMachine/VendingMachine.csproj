@@ -65,6 +65,7 @@
     <Compile Include="CashPayment.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="IPayment.cs" />
+    <Compile Include="MyEventArgs.cs" />
     <Compile Include="Product.cs">
       <DependentUpon>VendingMachineDM.tt</DependentUpon>
     </Compile>

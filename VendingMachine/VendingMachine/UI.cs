@@ -6,8 +6,8 @@ namespace VendingMachine
     class UI
     {
         Controller ctrl = new Controller();
-        List<double> acceptedDenominations = new List<double>() { 10, 5, 1, 0.5 };
-
+        IPayment payment;
+        
         public void Run()
         {
             MainMenu();
@@ -56,63 +56,33 @@ namespace VendingMachine
             switch (c)
             {
                 case "1":
-                    ShopMenuCash();
+                    payment = new CashPayment();
+                    ShopMenu();
                     break;
                 case "2":
-                    ShopMenuCard();
+                    payment = new CardPayment();
+                    ShopMenu();
                     break;
             }
         }
-        public void ShopMenuCash()
+        public void ShopMenu()
         {
             ShowProductList();
             Console.WriteLine("Product id:");
             int id = Int32.Parse(Console.ReadLine());
-            while (!ctrl.IsEnoughCashMoney(id))
-            {
-                Console.WriteLine("Introduce money:");
-                double money = Double.Parse(Console.ReadLine());
-                if (IsValidMoney(money))
-                {
-                    ctrl.addMoney(money);
-                }
-                else {
-                    throw new Exception("Money not accepted");
-                }
-
-            }
-            if (ctrl.IsEnoughCashMoney(id))
-            {
-                if (ctrl.BuyProductCash(id))
-                {
-                    Console.WriteLine("Product bought successfully :D");
-                    ShowProductList();
-                }
-                else
-                {
-                    Console.WriteLine("The Product wasn't bought :( \n");
-                    Console.ReadKey();
-                }
-            }
+            ctrl = new Controller(payment);
+            ctrl.BuyProduct(id);
+            //if (ctrl.BuyProduct(id))
+            //{
+            //    Console.WriteLine("Product bought successfully :D");
+            //    ShowProductList();
+            //}
+            //else
+            //{
+            //    Console.WriteLine("The Product wasn't bought :( \n");
+            //    Console.ReadKey();
+            //}
         }
-        public bool IsValidMoney(double money) {
-            if (acceptedDenominations.Contains(money)) {
-                return true;
-            }
-            return false;
-        }
-
-        public void ShopMenuCard() {
-            ShowProductList();
-            Console.WriteLine("Product id:");
-            int id = Int32.Parse(Console.ReadLine());
-            Console.WriteLine("CardNo:");
-            string cardNo = Console.ReadLine();
-            Console.WriteLine("PIN:");
-            string pin= Console.ReadLine();
-            ctrl.BuyProductByCard(id, cardNo, pin);
-        }
-
         public void ModifyProductList()
         {
             Tuple<string, int, double> tuple;

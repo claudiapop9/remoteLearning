@@ -8,16 +8,11 @@ namespace VendingMachine
     {
         private string cardNo;
         private string pin;
-
-        public CardPayment(string cardNo, string pin)
-        {
-            this.cardNo = cardNo;
-            this.pin = pin;
-        }
-
+        private bool enough = false;
+                
         public void Pay(double cost)
         {
-            if (IsValidCard() && IsEnough(cost))
+            if (enough)
             {
                 using (VMachineEntities db = new VMachineEntities())
                 {
@@ -29,31 +24,46 @@ namespace VendingMachine
             }
             else
             {
-                if (!IsValidCard()) { throw new Exception("Not Valid Credentials"); }
-                else if (!IsEnough(cost))
-                {
-                    throw new Exception("Not EnoughMoney");
-                }
+                throw new Exception("Not EnoughMoney");
             }
         }
         public bool IsEnough(double cost)
         {
+            AskDetails();
             using (VMachineEntities db = new VMachineEntities())
             {
                 Bank bankAccount = db.Banks.Where(x => x.CardNO == cardNo).FirstOrDefault();
                 if (bankAccount.Amount >= cost)
                 {
-                    return true;
+                    enough = true;
+                    return enough;
                 }
-                return false;
+                return enough;
             }
         }
-        public bool IsValidCard()
+        public void AskDetails()
+        {
+            Console.WriteLine("CardNo:");
+            string cardNo = Console.ReadLine();
+            Console.WriteLine("PIN:");
+            string pin = Console.ReadLine();
+            if (IsValidCard(cardNo, pin))
+            {
+                this.cardNo = cardNo;
+                this.pin = pin;
+            }
+            else
+            {
+                throw new Exception("Not Valid Credentials");
+            }
+        }
+
+        public bool IsValidCard(string cardNumber, string cardPin)
         {
             using (VMachineEntities db = new VMachineEntities())
             {
-                Bank bankAccount = db.Banks.Where(x => x.CardNO == cardNo).FirstOrDefault();
-                if (bankAccount.Pin == pin)
+                Bank bankAccount = db.Banks.Where(x => x.CardNO == cardNumber).FirstOrDefault();
+                if (bankAccount !=null && bankAccount.Pin == cardPin)
                 {
                     return true;
                 }
