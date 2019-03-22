@@ -10,8 +10,8 @@ namespace VendingMachineCodeFirst
 {
     class ProductCollection
     {
-        private string filePath = @".\currentDb.txt";
-        private string filePathAllStates = @".\all.txt";
+        private const string filePath = @".\currentDb.txt";
+        private const string filePathAllStates = @".\all.txt";
 
         public void AddProduct(Product p)
         {

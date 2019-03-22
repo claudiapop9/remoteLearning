@@ -19,11 +19,16 @@ namespace VendingMachineCodeFirst.Migrations
             new CashMoney() { Id = 4, MoneyValue = 0.5, Quantity = 10 });
 
             context.Accounts.AddOrUpdate(x => x.AccountId,
-            new Account() { AccountId = 1,CardNO = "1234", Pin = "1004",Amount=100 },
+            new Account() { AccountId = 1, CardNO = "1234", Pin = "1004", Amount = 100 },
             new Account() { AccountId = 2, CardNO = "5678", Pin = "5555", Amount = 50 },
-            new Account() { AccountId = 3, CardNO = "4321", Pin = "1234", Amount = 10 }
-
-        );
+            new Account() { AccountId = 3, CardNO = "4321", Pin = "1234", Amount = 10 });
+            
+            context.Products.AddOrUpdate(x => x.ProductId,
+            new Product() { ProductId = 1, Name = "Coca Cola", Quantity = 5, Price = 3.5 },
+            new Product() { ProductId = 2, Name = "Kinder Bueno", Quantity = 5, Price = 3.5 },
+            new Product() { ProductId = 3, Name = "Bakerolls", Quantity = 7, Price = 5 },
+            new Product() { ProductId = 4, Name = "Sprite", Quantity = 5, Price = 3.5 },
+            new Product() { ProductId = 5, Name = "Almonds", Quantity = 5, Price = 2 });
         }
     }
 }
