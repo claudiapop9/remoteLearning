@@ -8,6 +8,7 @@ namespace VendingMachineCodeFirst
 {
     class CashPayment : IPayment
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         List<double> acceptedDenominations = new List<double>() { 10, 5, 1, 0.5 };
         private List<CashMoney> introducedMoney = new List<CashMoney>();
         double totalMoney=0;
@@ -47,20 +48,22 @@ namespace VendingMachineCodeFirst
             {
                 Console.WriteLine("Introduce money:");
                 double money = Double.Parse(Console.ReadLine());
-                addMoney(money);
+                AddMoney(money);
                 while (totalMoney < cost)
                 {
                     Console.WriteLine($"Not enough.Introduce more: {cost - totalMoney}:");
                     money = Double.Parse(Console.ReadLine());
+                    AddMoney(money);
                 };
             }
             catch (Exception e) {
+                log.Error("Wrong introduced money.");
                 Console.WriteLine(e);
             }
 
         }
 
-        public void addMoney(double money)
+        public void AddMoney(double money)
         {
             if (acceptedDenominations.Contains(money))
             {
@@ -75,34 +78,44 @@ namespace VendingMachineCodeFirst
 
         public void UpdateMoney(double value, int quantity)
         {
-            using (var db = new VendMachineDbContext())
+            try
             {
-                CashMoney cashMoney = db.Money.Where(x => x.MoneyValue == value).FirstOrDefault();
-                cashMoney.Quantity += quantity;
-                db.Entry(cashMoney).State = EntityState.Modified;
-                db.SaveChanges();
+                using (var db = new VendMachineDbContext())
+                {
+                    CashMoney cashMoney = db.Money.Where(x => x.MoneyValue == value).FirstOrDefault();
+                    cashMoney.Quantity += quantity;
+                    db.Entry(cashMoney).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception) {
+                log.Error("Fail database connection\n");
             }
         }
         public void GiveChange(double change)
         {
             List<CashMoney> money = new List<CashMoney>();
             List<CashMoney> changedMoney = new List<CashMoney>();
-
-            using (var db = new VendMachineDbContext())
+            try
             {
-                money = db.Money.ToList<CashMoney>();
-                changedMoney = CalculateMinimum(money, change);
-                Console.WriteLine("Change: ");
-                for (int i = 0; i < changedMoney.Count; i++)
+                using (var db = new VendMachineDbContext())
                 {
-                    CashMoney coinFromChange = changedMoney[i];
-                    Console.Write(changedMoney[i]+" ");
-                    CashMoney cashMoney = db.Money.Where(x => x.MoneyValue == coinFromChange.MoneyValue).FirstOrDefault();
-                    cashMoney.Quantity -= coinFromChange.Quantity;
-                    db.Entry(cashMoney).State = EntityState.Modified;
-                    db.SaveChanges();
+                    money = db.Money.ToList<CashMoney>();
+                    changedMoney = CalculateMinimum(money, change);
+                    Console.WriteLine("Change: ");
+                    for (int i = 0; i < changedMoney.Count; i++)
+                    {
+                        CashMoney coinFromChange = changedMoney[i];
+                        Console.Write(changedMoney[i] + " ");
+                        CashMoney cashMoney = db.Money.Where(x => x.MoneyValue == coinFromChange.MoneyValue).FirstOrDefault();
+                        cashMoney.Quantity -= coinFromChange.Quantity;
+                        db.Entry(cashMoney).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
-                
+            }
+            catch (Exception) {
+                log.Error("Fail database connection\n");
             }
         }
 

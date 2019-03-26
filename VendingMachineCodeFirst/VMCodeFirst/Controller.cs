@@ -38,7 +38,7 @@ namespace VendingMachineCodeFirst {
         public bool BuyProduct(int productId)
         {
             double productPrice = productCollection.GetProductPriceByKey(productId);
-            if (payment.IsEnough(productPrice))
+            if (productPrice !=-1 && payment.IsEnough(productPrice))
             {
                 productCollection.DecreaseProductQuantity(productId);
                 payment.Pay(productPrice);

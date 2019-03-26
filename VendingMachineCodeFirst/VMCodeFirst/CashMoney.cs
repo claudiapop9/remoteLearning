@@ -8,6 +8,7 @@ namespace VendingMachineCodeFirst
         public int Quantity { get; set; }
 
         public CashMoney() { }
+
         public CashMoney(double moneyValue, int quantity)
         {
             MoneyValue = moneyValue;

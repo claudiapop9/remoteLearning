@@ -6,43 +6,56 @@ namespace VendingMachineCodeFirst
 {
     class CardPayment : IPayment
     {
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string cardNo;
         private string pin;
         private bool enough = false;
                 
         public void Pay(double cost)
         {
-            if (enough)
-            {
-                using (var db = new VendMachineDbContext())
+           
+                try
                 {
-                    Account AccountAccount = db.Accounts.Where(x => x.CardNO == cardNo).FirstOrDefault();
-                    AccountAccount.Amount -= cost;
-                    db.Entry(AccountAccount).State = EntityState.Modified;
-                    db.SaveChanges();
+                    using (var db = new VendMachineDbContext())
+                    {
+                        Account Account = db.Accounts.Where(x => x.CardNO == cardNo).FirstOrDefault();
+                        Account.Amount -= cost;
+                        db.Entry(Account).State = EntityState.Modified;
+                        db.SaveChanges();
+                        log.Info("Payment success");
+                    }
                 }
-            }
-            else
-            {
-                throw new Exception("Not EnoughMoney");
-            }
+                catch(Exception) {
+                    log.Error("Db connection failed");
+                }
+           
         }
         public bool IsEnough(double cost)
         {
             AskDetails();
-            using (var db = new VendMachineDbContext())
+            try
             {
-                Account AccountAccount = db.Accounts.Where(x => x.CardNO == cardNo).FirstOrDefault();
-                if (AccountAccount.Amount >= cost)
+                using (var db = new VendMachineDbContext())
                 {
-                    enough = true;
-                    return enough;
+                    Account Account = db.Accounts.Where(x => x.CardNO == cardNo).FirstOrDefault();
+                    if (Account.Amount >= cost)
+                    {
+                        
+                        return true;
+                    }
+                   
                 }
-                return enough;
             }
+            catch (Exception)
+            {
+                log.Error("Db connection failed");
+
+            }
+            return false;
         }
         public void AskDetails()
         {
+            
             Console.WriteLine("CardNo:");
             string cardNo = Console.ReadLine();
             Console.WriteLine("PIN:");
@@ -60,16 +73,22 @@ namespace VendingMachineCodeFirst
 
         public bool IsValidCard(string cardNumber, string cardPin)
         {
-            using (var db = new VendMachineDbContext())
+            try
             {
-                Account AccountAccount = db.Accounts.Where(x => x.CardNO == cardNumber).FirstOrDefault();
-                if (AccountAccount !=null && AccountAccount.Pin == cardPin)
+                using (var db = new VendMachineDbContext())
                 {
-                    return true;
+                    Account Account = db.Accounts.Where(x => x.CardNO == cardNumber).FirstOrDefault();
+                    if (Account != null && Account.Pin == cardPin)
+                    {
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
-
+            catch (Exception) {
+                log.Error("Db connection failed");
+            }
+            return false;
         }
     }
 }
