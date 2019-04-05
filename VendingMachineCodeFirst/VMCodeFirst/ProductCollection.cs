@@ -11,8 +11,7 @@ namespace VendingMachineCodeFirst
     class ProductCollection
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private const string filePath = @".\currentDb.txt";
-        private const string filePathAllStates = @".\all.txt";
+       
 
         public void AddProduct(Product p)
         {
@@ -23,7 +22,6 @@ namespace VendingMachineCodeFirst
                     db.Products.Add(p);
                     db.SaveChanges();
                 }
-                PersistData();
             }
             catch (Exception) {
                 log.Error("Db connection failed");
@@ -39,7 +37,7 @@ namespace VendingMachineCodeFirst
                     db.Entry(p).State = EntityState.Modified;
                     db.SaveChanges();
                 }
-                PersistData();
+                
             }
             catch (Exception)
             {
@@ -73,7 +71,7 @@ namespace VendingMachineCodeFirst
                     db.Products.Remove(p);
                     db.SaveChanges();
                 }
-                PersistData();
+                
             }catch (Exception)
             {
                 log.Error("Db connection failed-remove prod");
@@ -98,6 +96,33 @@ namespace VendingMachineCodeFirst
             return -1;
         }
 
+        public bool Refill() {
+
+            try
+            {
+                using (var db = new VendMachineDbContext())
+                {
+                    List<Product> productQuantity = (from product in db.Products
+                                                      where (product.Quantity != 10)
+                                                      select product).ToList();
+
+                    foreach (Product prod in productQuantity) {
+                        prod.Quantity = 10;
+                        db.Entry(prod).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                log.Info("Refill successful");
+                
+                return true;
+            }
+            catch (Exception)
+            {
+                log.Error("Refill failed");
+                return false;
+            }
+
+        }
         public List<Product> GetProducts()
         {
             List<Product> products = new List<Product>();
@@ -115,55 +140,8 @@ namespace VendingMachineCodeFirst
             }
             return products;
         }
-        public void PersistData()
-        {
-            WriteCurrentState(filePath);
-            AppendCurrentState(filePathAllStates);
-        }
-        public void WriteCurrentState(string filePath)
-        {
-            try
-            {
-                using (StreamWriter myFile = new StreamWriter(filePath))
-                {
-                    List<Product> products = GetProducts();
-                    foreach (Product p in products)
-                    {
-                        myFile.WriteLine(JsonConvert.SerializeObject(p));
-                    }
-                    log.Info("Current state written in file");
 
-                }
-            }
-            catch (Exception) {
-                log.Error("File error");
-            }
-        }
-        public void AppendCurrentState(string filePath)
-        {
-            
-            List<Product> products = GetProducts();
-            try
-            {
-                foreach (Product p in products)
-                {
-                    File.AppendAllLines(filePath, new[] { JsonConvert.SerializeObject(p) });
-                }
-                log.Info("Current state appended");
-            }
-            catch (ArgumentNullException)
-            {
-                log.Error("File path/contents is null");
-            }
-            catch (IOException)
-            {
-                log.Error("Error occurred while opening the file");
-            }
-            catch (Exception) {
-                log.Error("File Error when appending");
-            }
-
-        }
+       
 
     }
 }

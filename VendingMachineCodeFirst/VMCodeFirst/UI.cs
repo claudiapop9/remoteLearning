@@ -9,7 +9,7 @@ namespace VendingMachineCodeFirst
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         Controller ctrl = new Controller();
         IPayment payment;
-        
+
         public void Run()
         {
             MainMenu();
@@ -21,6 +21,8 @@ namespace VendingMachineCodeFirst
             str += "1.List of products\n";
             str += "2.Buy product\n";
             str += "3.Modify product\n";
+            str += "4.Refill\n";
+            str += "5.Generate report\n";
             Console.WriteLine(str);
             string c = Console.ReadLine();
             switch (c)
@@ -34,8 +36,17 @@ namespace VendingMachineCodeFirst
                 case "3":
                     ModifyProductList();
                     break;
+                case "4":
+                    RefillProducts();
+                    break;
+                case "5":
+                    GenerateReport();
+                    break;
+
             }
         }
+
+
         public void ShowProductList()
         {
             List<Product> products = ctrl.GetProductsList();
@@ -90,16 +101,17 @@ namespace VendingMachineCodeFirst
                     log.Info("The Product wasn't bought :( \n");
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 log.Error(e);
- 
+
             }
-            
+
         }
         public void ModifyProductList()
         {
             Tuple<string, int, double> tuple;
-            Tuple<string, int, double> emptyTuple= new Tuple<string, int, double>("", -1, -1);
+            Tuple<string, int, double> emptyTuple = new Tuple<string, int, double>("", -1, -1);
             Console.WriteLine(" Press 1 to add product\n Press 2 to update product\n Press 3 to delete product");
             string cmd = Console.ReadLine();
             switch (cmd)
@@ -107,7 +119,8 @@ namespace VendingMachineCodeFirst
                 case "1":
                     log.Info("ADD product ");
                     tuple = AskDetails();
-                    if (tuple != emptyTuple) {
+                    if (tuple != emptyTuple)
+                    {
                         ctrl.AddProductToList(tuple.Item1, tuple.Item2, tuple.Item3);
                         ShowProductList();
                     }
@@ -132,7 +145,8 @@ namespace VendingMachineCodeFirst
                         ctrl.DeleteProductFromList(id2);
                         ShowProductList();
                     }
-                    catch (Exception) {
+                    catch (Exception)
+                    {
                         log.Error("Id must be integer!");
                     }
                     break;
@@ -152,12 +166,29 @@ namespace VendingMachineCodeFirst
 
                 return new Tuple<string, int, double>(name, quantity, price);
             }
-            catch (Exception) {
+            catch (Exception)
+            {
                 log.Error("PRODUCT Details incorrect introduced");
             }
-            return new Tuple<string, int, double>("",-1,-1);
+            return new Tuple<string, int, double>("", -1, -1);
 
 
+        }
+
+        private void RefillProducts()
+        {
+            if (ctrl.Refill())
+            {
+                Console.WriteLine("Refill successful");
+            }
+            else {
+                Console.WriteLine("Refill failed");
+            }
+        }
+
+        private void GenerateReport()
+        {
+           ctrl.GenerateReport();
         }
     }
 }
