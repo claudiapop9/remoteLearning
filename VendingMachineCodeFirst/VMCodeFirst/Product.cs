@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VendingMachineCodeFirst
 {
@@ -8,6 +9,7 @@ namespace VendingMachineCodeFirst
         public string Name { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
+        public ICollection<Transaction> Transactions { get; set; }
 
         public Product() { }
 

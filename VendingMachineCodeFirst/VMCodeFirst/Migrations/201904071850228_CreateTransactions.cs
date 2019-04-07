@@ -3,9 +3,8 @@ namespace VendingMachineCodeFirst.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class AccountsMoney2 : DbMigration
+    public partial class CreateTransactions : DbMigration
     {
-        
         public override void Up()
         {
             CreateTable(
@@ -29,7 +28,6 @@ namespace VendingMachineCodeFirst.Migrations
                     })
                 .PrimaryKey(t => t.Id);
             
-            
             CreateTable(
                 "dbo.Products",
                 c => new
@@ -40,12 +38,27 @@ namespace VendingMachineCodeFirst.Migrations
                         Price = c.Double(nullable: false),
                     })
                 .PrimaryKey(t => t.ProductId);
-
+            
+            CreateTable(
+                "dbo.Transactions",
+                c => new
+                    {
+                        TransactionId = c.Int(nullable: false, identity: true),
+                        Type = c.String(),
+                        Date = c.DateTime(nullable: false),
+                        ProductId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.TransactionId)
+                .ForeignKey("dbo.Products", t => t.ProductId, cascadeDelete: true)
+                .Index(t => t.ProductId);
             
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.Transactions", "ProductId", "dbo.Products");
+            DropIndex("dbo.Transactions", new[] { "ProductId" });
+            DropTable("dbo.Transactions");
             DropTable("dbo.Products");
             DropTable("dbo.CashMoneys");
             DropTable("dbo.Accounts");

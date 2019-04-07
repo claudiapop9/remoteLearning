@@ -3,7 +3,7 @@ namespace VendingMachineCodeFirst.Migrations
     using System.Data.Entity.Migrations;
 
 
-    internal sealed class Configuration : DbMigrationsConfiguration<VendingMachineCodeFirst.VendMachineDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<VendMachineDbContext>
     {
         public Configuration()
         {

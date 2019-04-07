@@ -7,13 +7,13 @@ namespace VendingMachineCodeFirst.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class AccountsMoney2 : IMigrationMetadata
+    public sealed partial class CreateTransactions : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AccountsMoney2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateTransactions));
         
         string IMigrationMetadata.Id
         {
-            get { return "201903141350044_AccountsMoney2"; }
+            get { return "201904071850228_CreateTransactions"; }
         }
         
         string IMigrationMetadata.Source

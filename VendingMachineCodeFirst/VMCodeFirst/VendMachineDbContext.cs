@@ -11,5 +11,8 @@ namespace VendingMachineCodeFirst
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<CashMoney> Money { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set;}
     }
+
+    
 }
