@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,8 +8,9 @@ namespace VendingMachineCodeFirst
     class Data
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private string filePath;
-        private string filePathAll;
+
+        private readonly string filePath;
+        private readonly string filePathAll;
 
         public Data(string filePath, string filePathAll)
         {

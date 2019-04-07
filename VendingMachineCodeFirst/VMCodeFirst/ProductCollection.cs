@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Data.Entity;
-using System.IO;
-using Newtonsoft.Json;
+
 
 namespace VendingMachineCodeFirst
 {
@@ -95,16 +94,14 @@ namespace VendingMachineCodeFirst
             }
             return -1;
         }
-
+       
         public bool Refill() {
 
             try
             {
                 using (var db = new VendMachineDbContext())
                 {
-                    List<Product> productQuantity = (from product in db.Products
-                                                      where (product.Quantity != 10)
-                                                      select product).ToList();
+                    List<Product> productQuantity = GetProductsToRefill();
 
                     foreach (Product prod in productQuantity) {
                         prod.Quantity = 10;
@@ -123,6 +120,29 @@ namespace VendingMachineCodeFirst
             }
 
         }
+
+        public List<Product> GetProductsToRefill()
+        {
+            try
+            {
+                using (var db = new VendMachineDbContext())
+                {
+                    List<Product> productQuantity = (from product in db.Products
+                        where (product.Quantity != 10)
+                        select product).ToList();
+                    return productQuantity;
+                }
+
+            }
+            catch (Exception)
+            {
+                log.Error("Find refill products failed");
+            }
+
+            return new List<Product>();
+        }
+
+
         public List<Product> GetProducts()
         {
             List<Product> products = new List<Product>();

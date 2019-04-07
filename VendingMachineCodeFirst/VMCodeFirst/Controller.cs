@@ -30,7 +30,6 @@ namespace VendingMachineCodeFirst {
         {
             Product p = new Product(productId, name, quantity, price);
             this.productCollection.UpdateProduct(p);
-            //dataStorage.PersistData(this.productCollection.GetProducts());
         }
 
         public void DeleteProductFromList(int productId)
