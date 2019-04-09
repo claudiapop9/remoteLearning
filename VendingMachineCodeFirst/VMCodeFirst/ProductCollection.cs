@@ -23,7 +23,7 @@ namespace VendingMachineCodeFirst
                 }
             }
             catch (Exception) {
-                log.Error("Db connection failed");
+                log.Error("Db connection failed-ADD");
             }
         }
 
@@ -40,7 +40,7 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception)
             {
-                log.Error("Db connection failed");
+                log.Error("Db connection failed-UPDATE");
             }
         }
 
@@ -57,7 +57,7 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception)
             {
-                log.Error("Db connection failed");
+                log.Error("Db connection failed-DecreaseProd");
             }
         }
         public void RemoveProduct(int productId)
@@ -90,7 +90,7 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception)
             {
-                log.Error("Db connection failed-get product by key");
+                log.Error("Db connection failed-GET product by KEY");
             }
             return -1;
         }
@@ -109,13 +109,13 @@ namespace VendingMachineCodeFirst
                         db.SaveChanges();
                     }
                 }
-                log.Info("Refill successful");
+                log.Info("REFILL successful");
                 
                 return true;
             }
             catch (Exception)
             {
-                log.Error("Refill failed");
+                log.Error("REFILL failed");
                 return false;
             }
 
@@ -136,7 +136,7 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception)
             {
-                log.Error("Find refill products failed");
+                log.Error("FIND refill products failed");
             }
 
             return new List<Product>();
@@ -156,7 +156,7 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception)
             {
-                log.Error("Db connection");
+                log.Error("Db connection-GET Prod");
             }
             return products;
         }

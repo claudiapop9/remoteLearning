@@ -112,10 +112,11 @@ namespace VendingMachineCodeFirst
                         db.Entry(cashMoney).State = EntityState.Modified;
                         db.SaveChanges();
                     }
+                    log.Info("GIVE Change success");
                 }
             }
             catch (Exception) {
-                log.Error("Fail database connection\n");
+                log.Error("Fail database connection-GIVE Change");
             }
         }
 
