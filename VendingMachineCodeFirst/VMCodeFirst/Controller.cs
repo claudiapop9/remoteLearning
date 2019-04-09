@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace VendingMachineCodeFirst {
     class Controller
@@ -9,6 +10,7 @@ namespace VendingMachineCodeFirst {
         private List<CashMoney> introducedMoney = new List<CashMoney>();
         private ProductCollection productCollection = new ProductCollection();
         private Data dataStorage=new Data(filePath,filePathAllStates);
+        private TransactionManager transactionManager=new TransactionManager();
         private Report report = new Report();
         private IPayment payment;
 
@@ -39,9 +41,11 @@ namespace VendingMachineCodeFirst {
         }
         public bool Refill()
         {
+            List<Product> productsToRefList = productCollection.GetProductsToRefill();
             if (productCollection.Refill())
             {
                 dataStorage.PersistData(this.productCollection.GetProducts());
+                AddTransactionRefill(productsToRefList);
                 return true;
             }
             else
@@ -50,6 +54,20 @@ namespace VendingMachineCodeFirst {
             }
 
         }
+        public void AddTransactionRefill(List<Product> products)
+        {
+            foreach (var prod in products)
+            {
+                AddTransition("REFILL", prod.ProductId);
+            }
+        }
+
+        public void AddTransition(string info, int productId)
+        {
+            Transaction transaction = new Transaction(info, productId);
+            transactionManager.AddTransaction(transaction);
+        }
+
         public bool BuyProduct(int productId)
         {
             double productPrice = productCollection.GetProductPriceByKey(productId);
@@ -58,14 +76,17 @@ namespace VendingMachineCodeFirst {
                 productCollection.DecreaseProductQuantity(productId);
                 payment.Pay(productPrice);
                 dataStorage.PersistData(this.productCollection.GetProducts());
+                AddTransition("BUY",productId);
                 return true;
             }
             return false;
         }
 
+
         public void GenerateReport()
         {
-            report.GenerateReport(reportPath,dataStorage.GetAllStates());
+            List<Transaction> transactions = transactionManager.GetTransactions();
+            report.GenerateReport(reportPath,transactions);
         }
 
         public List<Product> GetProductsList()
