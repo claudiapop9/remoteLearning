@@ -1,0 +1,9 @@
+﻿
+
+namespace VendingMachineAdmin
+{
+    class UI
+    {
+
+    }
+}
