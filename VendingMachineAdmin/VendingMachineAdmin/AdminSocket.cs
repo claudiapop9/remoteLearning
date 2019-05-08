@@ -81,7 +81,7 @@ namespace VendingMachineAdmin
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                log.Error(e);
             }
 
             return null;
@@ -96,25 +96,41 @@ namespace VendingMachineAdmin
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                log.Error("SEND Message"+ e);
             }
         }
 
         public string ReceiveMessage()
         {
-            byte[] bytes = new byte[1024];
-            int bytesRec = sender.Receive(bytes);
-            string messageReceived = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+            try
+            {
+                byte[] bytes = new byte[1024];
+                int bytesRec = sender.Receive(bytes);
+                string messageReceived = Encoding.ASCII.GetString(bytes, 0, bytesRec);
 
-            Console.WriteLine("Echoed test = {0}", messageReceived);
-            Console.ReadKey();
-            return messageReceived;
+                Console.WriteLine("Echoed test = {0}", messageReceived);
+                Console.ReadKey();
+                return messageReceived;
+            }
+            catch (Exception e)
+            {
+                log.Error("Receive Message" + e);
+            }
+
+            return null;
         }
 
         public void ReleaseSocket()
         {
-            sender.Shutdown(SocketShutdown.Both);
-            sender.Close();
+            try
+            {
+                sender.Shutdown(SocketShutdown.Both);
+                sender.Close();
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
         }
     }
 }

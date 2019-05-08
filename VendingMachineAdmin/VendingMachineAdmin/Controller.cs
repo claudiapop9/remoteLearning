@@ -25,7 +25,6 @@ namespace VendingMachineAdmin
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
                     log.Error("Json convert" + ex);
                 }
 
