@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace VendingMachineCodeFirst
 {
@@ -19,7 +20,7 @@ namespace VendingMachineCodeFirst
             Quantity = quantity;
             Price = price;
         }
-
+        [JsonConstructor]
         public Product(int productId, string name, int quantity, double price)
         {
             ProductId = productId;

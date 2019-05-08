@@ -60,6 +60,7 @@
     <Compile Include="CardPayment.cs" />
     <Compile Include="CashMoney.cs" />
     <Compile Include="CashPayment.cs" />
+    <Compile Include="SocketCommunication.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="IPayment.cs" />
     <Compile Include="Migrations\201904071850228_CreateTransactions.cs" />

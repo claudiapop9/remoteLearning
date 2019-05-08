@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,24 +7,28 @@ namespace VendingMachineCodeFirst
 {
     class Report
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly log4net.ILog log =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public void GenerateReport(string filePath, List<Transaction> list)
+        public string GenerateReport(string filePath, List<Transaction> list)
         {
             try
             {
                 using (StreamWriter myFile = new StreamWriter(filePath))
                 {
-                    myFile.WriteLine("Report " + DateTime.Now);
-                    myFile.WriteLine(GetMostBought(list));
-                    myFile.WriteLine(GetLastRefillDate(list));
+                    string str = "Report " + DateTime.Now;
+                    str += GetMostBought(list) + "\n" + GetLastRefillDate(list);
+                    myFile.WriteLine(str);
                     log.Info("Report written successfully");
+                    return str;
                 }
             }
             catch (Exception)
             {
                 log.Error("Writing report");
             }
+
+            return null;
         }
 
         private string GetMostBought(List<Transaction> list)

@@ -1,36 +1,140 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
+using Newtonsoft.Json;
 
-namespace VendingMachineCodeFirst {
+
+namespace VendingMachineCodeFirst
+{
     class Controller
     {
         private const string filePath = @".\currentDb.txt";
         private const string filePathAllStates = @".\all.txt";
         private const string reportPath = @".\report.txt";
-        private List<CashMoney> introducedMoney = new List<CashMoney>();
+
+        private static readonly log4net.ILog log =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         private ProductCollection productCollection = new ProductCollection();
-        private Data dataStorage=new Data(filePath,filePathAllStates);
-        private TransactionManager transactionManager=new TransactionManager();
+        private Data dataStorage = new Data(filePath, filePathAllStates);
+        private TransactionManager transactionManager = new TransactionManager();
         private Report report = new Report();
         private IPayment payment;
 
 
-        public Controller() { }
+        public Controller()
+        {
+        }
+
         public Controller(IPayment paymentMethod)
         {
             this.payment = paymentMethod;
         }
 
-        public void AddProductToList(string name, int quantity, double price)
+        public bool BuyProduct(int productId)
         {
-            Product p = new Product(name, quantity, price);
+            double productPrice = productCollection.GetProductPriceByKey(productId);
+            if (productPrice != -1 && payment.IsEnough(productPrice))
+            {
+                productCollection.DecreaseProductQuantity(productId);
+                payment.Pay(productPrice);
+                dataStorage.PersistData(this.productCollection.GetProducts());
+                AddTransition("BUY", productId);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Communicate()
+        {
+            SocketCommunication socketCommunication = new SocketCommunication();
+            if (socketCommunication.IsConnected())
+            {
+                try
+                {
+                    string message = socketCommunication.ReceiveMessage();
+                    string option = message.Split(' ')[0];
+                    string data = message.Split(' ')[1];
+                    switch (option)
+                    {
+                        case "GET":
+                            List<Product> list = GetProductsList();
+                            socketCommunication.SendData(JsonConvert.SerializeObject(list));
+                            break;
+                        case "ADD":
+                            Product product = JsonConvert.DeserializeObject<Product>(data);
+                            AddProductToList(product);
+                            log.Info(product);
+                            socketCommunication.SendData("Success ADD");
+                            break;
+                        case "UPDATE":
+
+                            Product productToUpdate = JsonConvert.DeserializeObject<Product>(data);
+                            UpdateProductInList(productToUpdate);
+                            log.Info(productToUpdate);
+                            socketCommunication.SendData("Success UPDATE");
+
+                            break;
+                        case "DELETE":
+
+                            int id = JsonConvert.DeserializeObject<int>(data);
+                            DeleteProductFromList(id);
+                            socketCommunication.SendData("Success DELETE");
+                            break;
+                        case "REFILL":
+                            if (Refill())
+                            {
+                                socketCommunication.SendData("Success REFILL");
+                            }
+                            else
+                            {
+                                socketCommunication.SendData("Fail REFILL");
+                            }
+                            break;
+                        case "REPORT":
+                            string dataReport = GenerateReport();
+                            if (dataReport != null)
+                            {
+                                socketCommunication.SendData(dataReport);
+                                log.Info("REPORT sent");
+                            }
+                            else
+                            {
+                                socketCommunication.SendData("Generate Report fail");
+                                log.Info("REPORT fail");
+                            }
+
+                            break;
+                    }
+                }
+                catch (ArgumentNullException ane)
+                {
+                    log.Error("ArgumentNullException : {0}", ane);
+                }
+                catch (SocketException se)
+                {
+                    log.Error("SocketException : {0}", se);
+                }
+                catch (JsonException ex)
+                {
+                    log.Error("Json convert" + ex);
+                }
+                catch (Exception ex)
+                {
+                    log.Info(ex);
+                }
+            }
+        }
+
+        public void AddProductToList(Product p)
+        {
             this.productCollection.AddProduct(p);
             dataStorage.PersistData(this.productCollection.GetProducts());
         }
 
-        public void UpdateProductInList(int productId, string name, int quantity, double price)
+        public void UpdateProductInList(Product p)
         {
-            Product p = new Product(productId, name, quantity, price);
             this.productCollection.UpdateProduct(p);
         }
 
@@ -39,6 +143,7 @@ namespace VendingMachineCodeFirst {
             this.productCollection.RemoveProduct(productId);
             dataStorage.PersistData(this.productCollection.GetProducts());
         }
+
         public bool Refill()
         {
             List<Product> productsToRefList = productCollection.GetProductsToRefill();
@@ -52,8 +157,14 @@ namespace VendingMachineCodeFirst {
             {
                 return false;
             }
-
         }
+
+        public string GenerateReport()
+        {
+            List<Transaction> transactions = transactionManager.GetTransactions();
+            return report.GenerateReport(reportPath, transactions);
+        }
+
         public void AddTransactionRefill(List<Product> products)
         {
             foreach (var prod in products)
@@ -68,34 +179,10 @@ namespace VendingMachineCodeFirst {
             transactionManager.AddTransaction(transaction);
         }
 
-        public bool BuyProduct(int productId)
-        {
-            double productPrice = productCollection.GetProductPriceByKey(productId);
-            if (productPrice !=-1 && payment.IsEnough(productPrice))
-            {
-                productCollection.DecreaseProductQuantity(productId);
-                payment.Pay(productPrice);
-                dataStorage.PersistData(this.productCollection.GetProducts());
-                AddTransition("BUY",productId);
-                return true;
-            }
-            return false;
-        }
-
-
-        public void GenerateReport()
-        {
-            List<Transaction> transactions = transactionManager.GetTransactions();
-            report.GenerateReport(reportPath,transactions);
-        }
 
         public List<Product> GetProductsList()
         {
             return productCollection.GetProducts();
         }
-
-
-
-
     }
 }
