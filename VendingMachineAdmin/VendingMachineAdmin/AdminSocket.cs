@@ -48,14 +48,17 @@ namespace VendingMachineAdmin
                 }
                 catch (ArgumentNullException ane)
                 {
+                    Console.WriteLine("Could not connect to server :(");
                     log.Error("ArgumentNullException : {0}", ane);
                 }
                 catch (SocketException se)
                 {
+                    Console.WriteLine("Could not connect to server :(");
                     log.Error("SocketException : {0}", se);
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("Could not connect to server :(");
                     log.Error("Unexpected exception : {0}", e);
                 }
             }
