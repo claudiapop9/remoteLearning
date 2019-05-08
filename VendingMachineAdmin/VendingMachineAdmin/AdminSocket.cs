@@ -1,70 +1,117 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace VendingMachineAdmin
 {
     class AdminSocket
+
     {
-        public static string data = null;
+        private static string serverIp = "localhost";
+        private static int port = 8080;
+        private Socket sender;
 
-        public static string StartListening(string message)
+        private static readonly log4net.ILog log =
+            log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public AdminSocket()
         {
-           byte[] bytes = new Byte[1024];
+            this.sender = StartClient();
+        }
 
-           IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
-  
-            Socket listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
+        public static Socket StartClient()
+        {
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
 
-                while (true)
+                Socket sender = new Socket(ipAddress.AddressFamily,
+                    SocketType.Stream, ProtocolType.Tcp);
+
+                try
                 {
-                    Console.WriteLine("Waiting for a connection...");
-                   
-                    Socket handler = listener.Accept();
-                    data = null;
-  
-                    while (true)
-                    {
-                        int bytesRec = handler.Receive(bytes);
-                        data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                        if (data.IndexOf("Success") > -1)
-                        {
-                            break;
-                        }
-                    }
+                    sender.Connect(remoteEP);
 
-                    Console.WriteLine("Text received : {0}", data);
-                    Console.ReadKey();
-                    
-                  
-                    byte[] msg = Encoding.ASCII.GetBytes(message);
+                    Console.WriteLine("Socket connected to {0}",
+                        sender.RemoteEndPoint.ToString());
 
-                    handler.Send(msg);
-                    handler.Shutdown(SocketShutdown.Both);
-                    handler.Close();
-                    return data;
+                    byte[] bytes = new byte[1024];
+                    byte[] msg = Encoding.ASCII.GetBytes("Success");
+
+                    sender.Send(msg);
+
+                    return sender;
                 }
-
+                catch (ArgumentNullException ane)
+                {
+                    log.Error("ArgumentNullException : {0}", ane);
+                }
+                catch (SocketException se)
+                {
+                    log.Error("SocketException : {0}", se);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Unexpected exception : {0}", e);
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                log.Error(e);
+                Console.WriteLine("Could not connect to server :(");
             }
 
-            Console.WriteLine("\nPress ENTER to continue...");
-            Console.Read();
-            return "Error";
+            return null;
+        }
+
+        public string Get(string message)
+        {
+            try
+            {
+                SendMessage(message);
+                var response = ReceiveMessage();
+                return response;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
+        }
+
+        public void SendMessage(string message)
+        {
+            try
+            {
+                byte[] msg = Encoding.ASCII.GetBytes(message);
+                sender.Send(msg);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public string ReceiveMessage()
+        {
+            byte[] bytes = new byte[1024];
+            int bytesRec = sender.Receive(bytes);
+            string messageReceived = Encoding.ASCII.GetString(bytes, 0, bytesRec);
+
+            Console.WriteLine("Echoed test = {0}", messageReceived);
+            Console.ReadKey();
+            return messageReceived;
+        }
+
+        public void ReleaseSocket()
+        {
+            sender.Shutdown(SocketShutdown.Both);
+            sender.Close();
         }
     }
 }

@@ -7,33 +7,47 @@ namespace VendingMachineAdmin
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Controller ctrl=new Controller();
-
+     
         public void Run()
         {
-            MainMenu();
+           MainMenu();
         }
 
         public void MainMenu()
         {
             string str = "------------Menu----------------\n\n";
-            str += "1.Modify product\n";
-            str += "2.Refill\n";
-            str += "3.Generate report\n";
+            str += "1.List of product\n";
+            str += "2.Modify product\n";
+            str += "3.Refill\n";
+            str += "4.Generate report\n";
 
             Console.WriteLine(str);
             string c = Console.ReadLine();
             switch (c)
             {
                 case "1":
-                    ModifyProductList();
+                    GetAllProducts();
                     break;
                 case "2":
-                    RefillProducts();
+                    ModifyProductList();
                     break;
                 case "3":
+                    RefillProducts();
+                    break;
+                case "4":
                     GenerateReport();
                     break;
             }
+        }
+
+        public void GetAllProducts()
+        {
+            Console.WriteLine("List of products");
+            foreach (var prod in ctrl.GetAllProduct())
+            {
+                Console.WriteLine(prod);
+            }
+            Console.ReadKey();
         }
 
         public void ModifyProductList()
@@ -125,4 +139,4 @@ namespace VendingMachineAdmin
         }
 
     }
-    }
+}

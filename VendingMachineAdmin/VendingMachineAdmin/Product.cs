@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace VendingMachineAdmin
 {
@@ -9,8 +9,8 @@ namespace VendingMachineAdmin
         public string Name { get; set; }
         public int Quantity { get; set; }
         public double Price { get; set; }
-       
-        
+
+
         public Product(string name, int quantity, double price)
         {
             Name = name;
@@ -18,7 +18,8 @@ namespace VendingMachineAdmin
             Price = price;
         }
 
-        public Product(int id,string name, int quantity, double price)
+        [JsonConstructor]
+        public Product(int id, string name, int quantity, double price)
         {
             ProductId = id;
             Name = name;
@@ -27,14 +28,9 @@ namespace VendingMachineAdmin
         }
 
 
-
         public override String ToString()
         {
-
-            // return $"Id: {ProductId} Name: {Name} Quantity: {Quantity} Price: {Price}";
-            return $"Name: {Name} Quantity: {Quantity} Price: {Price}";
-
+            return $"Id: {ProductId} Name: {Name} Quantity: {Quantity} Price: {Price}";
         }
     }
 }
-
