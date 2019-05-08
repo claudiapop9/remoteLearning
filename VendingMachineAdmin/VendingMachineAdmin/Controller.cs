@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -32,7 +32,7 @@ namespace VendingMachineAdmin
             }
             catch (Exception e)
             {
-                log.Error("GET Products" + e);
+                log.Error("GET" + e);
             }
 
             return products;
@@ -81,7 +81,7 @@ namespace VendingMachineAdmin
             admin.SendMessage("DELETE " + JsonConvert.SerializeObject(id));
             string message = admin.ReceiveMessage();
             admin.ReleaseSocket();
-            log.Info("DELETE "+ id);
+            log.Info("DELETE"+ id);
             return message;
         }
 
@@ -98,8 +98,8 @@ namespace VendingMachineAdmin
         {
             admin.SendMessage("REPORT ");
             string message = admin.ReceiveMessage();
+            log.Info("REPORT "+ message);
             admin.ReleaseSocket();
-            log.Info("REPORT");
             return message;
         }
     }

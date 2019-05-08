@@ -42,12 +42,20 @@ namespace VendingMachineAdmin
 
         public void GetAllProducts()
         {
-            Console.WriteLine("List of products");
-            foreach (var prod in ctrl.GetAllProduct())
+            try
             {
-                Console.WriteLine(prod);
+                Console.WriteLine("List of products");
+                foreach (var prod in ctrl.GetAllProduct())
+                {
+                    Console.WriteLine(prod);
+                }
+
+                Console.ReadKey();
             }
-            Console.ReadKey();
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
         }
 
         public void ModifyProductList()
@@ -105,6 +113,12 @@ namespace VendingMachineAdmin
             {
                 Console.WriteLine("Name:");
                 string name = Console.ReadLine();
+                if (name.Contains(" "))
+                {
+                    string nameAux=name.Replace(" ","%");
+                    name = nameAux;
+                }
+
                 Console.WriteLine("Quantity:");
                 int quantity = Int32.Parse(Console.ReadLine());
                 Console.WriteLine("Price:");
@@ -113,7 +127,7 @@ namespace VendingMachineAdmin
                 Regex regexPrice= new Regex(@"^\d+([.]\d+)?$");
                 Regex regexQuantity = new Regex(@"^([1-9]+\d*)$|^0$");
 
-                if (regexPrice.IsMatch(price.ToString()) && regexQuantity.IsMatch(quantity.ToString()))
+                if (!name.Equals("") && regexPrice.IsMatch(price.ToString()) && regexQuantity.IsMatch(quantity.ToString()))
                 {
                    
                     return new Tuple<string, int, double>(name, quantity, price);
@@ -130,12 +144,14 @@ namespace VendingMachineAdmin
         private void RefillProducts()
         {
             Console.WriteLine(ctrl.Refill());
+            Console.ReadKey();
         }
 
         private void GenerateReport()
         {
            string response=ctrl.GenerateReport();
            Console.WriteLine(response);
+           Console.ReadKey();
         }
 
     }

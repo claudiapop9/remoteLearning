@@ -96,7 +96,7 @@ namespace VendingMachineAdmin
             }
             catch (Exception e)
             {
-                log.Error("SEND Message"+ e);
+                log.Error("SEND Message" + e);
             }
         }
 
@@ -107,9 +107,6 @@ namespace VendingMachineAdmin
                 byte[] bytes = new byte[1024];
                 int bytesRec = sender.Receive(bytes);
                 string messageReceived = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-
-                Console.WriteLine("Echoed test = {0}", messageReceived);
-                Console.ReadKey();
                 return messageReceived;
             }
             catch (Exception e)
