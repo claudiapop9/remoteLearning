@@ -37,7 +37,7 @@ namespace VendingMachineAdmin
                     sender.Connect(remoteEP);
 
                     Console.WriteLine("Socket connected to {0}",
-                        sender.RemoteEndPoint.ToString());
+                        sender.RemoteEndPoint);
 
                     byte[] bytes = new byte[1024];
                     byte[] msg = Encoding.ASCII.GetBytes("Success");

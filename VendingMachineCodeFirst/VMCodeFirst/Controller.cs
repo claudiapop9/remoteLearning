@@ -91,6 +91,7 @@ namespace VendingMachineCodeFirst
                             {
                                 socketCommunication.SendData("Fail REFILL");
                             }
+
                             break;
                         case "REPORT":
                             string dataReport = GenerateReport();
@@ -127,6 +128,11 @@ namespace VendingMachineCodeFirst
             }
         }
 
+        public List<Product> GetProductsList()
+        {
+            return productCollection.GetProducts();
+        }
+
         public void AddProductToList(Product p)
         {
             this.productCollection.AddProduct(p);
@@ -159,12 +165,6 @@ namespace VendingMachineCodeFirst
             }
         }
 
-        public string GenerateReport()
-        {
-            List<Transaction> transactions = transactionManager.GetTransactions();
-            return report.GenerateReport(reportPath, transactions);
-        }
-
         public void AddTransactionRefill(List<Product> products)
         {
             foreach (var prod in products)
@@ -179,10 +179,10 @@ namespace VendingMachineCodeFirst
             transactionManager.AddTransaction(transaction);
         }
 
-
-        public List<Product> GetProductsList()
+        public string GenerateReport()
         {
-            return productCollection.GetProducts();
+            List<Transaction> transactions = transactionManager.GetTransactions();
+            return report.GenerateReport(reportPath, transactions);
         }
     }
 }
