@@ -16,7 +16,7 @@ namespace VendingMachineCodeFirst
         {
             this.handler = StartListening();
         }
-        
+        //code review [Teo] method a bit too long, consider breaking it up into some private methods
         public static Socket StartListening()
         {
             byte[] bytes = new Byte[1024];
