@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 
-
+//code review [Teo]: a folder/namespace structure would help to isolate the application layers
 namespace VendingMachineCodeFirst
 {
     class Controller
