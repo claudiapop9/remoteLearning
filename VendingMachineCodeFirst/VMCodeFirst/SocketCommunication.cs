@@ -16,40 +16,19 @@ namespace VendingMachineCodeFirst
         {
             this.handler = StartListening();
         }
-        
-        public static Socket StartListening()
+
+        public Socket StartListening()
         {
-            byte[] bytes = new Byte[1024];
-
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
-
-            Socket listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
-
             try
             {
-                listener.Bind(localEndPoint);
-                listener.Listen(10);
-
+                Socket listener = InitializeSocket();
                 while (true)
                 {
                     Console.WriteLine("Waiting for a connection...");
-
                     Socket handler = listener.Accept();
-                    string data = null;
 
-                    while (true)
-                    {
-                        int bytesRec = handler.Receive(bytes);
-                        data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                        if (data.IndexOf("Success") > -1)
-                        {
-                            break;
-                        }
-                    }
-                    
+                    string data = ReceiveConfirmation(handler);
+
                     Console.WriteLine("Text received : {0}", data);
                     Console.ReadKey();
                     return handler;
@@ -63,7 +42,45 @@ namespace VendingMachineCodeFirst
             return null;
         }
 
-       
+        private Socket InitializeSocket()
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+
+            Socket listener = new Socket(ipAddress.AddressFamily,
+                SocketType.Stream, ProtocolType.Tcp);
+            try
+            {
+                listener.Bind(localEndPoint);
+                listener.Listen(10);
+            }
+            catch (Exception e)
+            {
+                log.Error("initialize " + e);
+            }
+
+            return listener;
+        }
+
+        private string ReceiveConfirmation(Socket handler)
+        {
+            byte[] bytes = new Byte[1024];
+            string data = null;
+
+            while (true)
+            {
+                int bytesRec = handler.Receive(bytes);
+                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
+                if (data.IndexOf("Success") > -1)
+                {
+                    break;
+                }
+            }
+
+            return data;
+        }
+
         public bool IsConnected()
         {
             return handler != null;
@@ -113,9 +130,8 @@ namespace VendingMachineCodeFirst
             }
             catch (Exception ex)
             {
-                log.Error("RELEASE "+ ex);
+                log.Error("RELEASE " + ex);
             }
-
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 
@@ -25,42 +27,47 @@ namespace VendingMachineAdmin
         {
             try
             {
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
+                Socket sender = InitializeSocket();
 
+                Console.WriteLine("Socket connected to {0}",
+                    sender.RemoteEndPoint);
+
+                byte[] msg = Encoding.ASCII.GetBytes("Success");
+
+                sender.Send(msg);
+
+                return sender;
+            }
+            catch (ArgumentNullException ane)
+            {
+                Console.WriteLine("Could not connect to server :(");
+                log.Error("ArgumentNullException : {0}", ane);
+            }
+            catch (SocketException se)
+            {
+                Console.WriteLine("Could not connect to server :(");
+                log.Error("SocketException : {0}", se);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not connect to server :(");
+                log.Error("Unexpected exception : {0}", e);
+            }
+
+            return null;
+        }
+
+        public static Socket InitializeSocket()
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
+            try
+            {
                 Socket sender = new Socket(ipAddress.AddressFamily,
                     SocketType.Stream, ProtocolType.Tcp);
-
-                try
-                {
-                    sender.Connect(remoteEP);
-
-                    Console.WriteLine("Socket connected to {0}",
-                        sender.RemoteEndPoint);
-
-                    byte[] bytes = new byte[1024];
-                    byte[] msg = Encoding.ASCII.GetBytes("Success");
-
-                    sender.Send(msg);
-
-                    return sender;
-                }
-                catch (ArgumentNullException ane)
-                {
-                    Console.WriteLine("Could not connect to server :(");
-                    log.Error("ArgumentNullException : {0}", ane);
-                }
-                catch (SocketException se)
-                {
-                    Console.WriteLine("Could not connect to server :(");
-                    log.Error("SocketException : {0}", se);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Could not connect to server :(");
-                    log.Error("Unexpected exception : {0}", e);
-                }
+                sender.Connect(remoteEP);
+                return sender;
             }
             catch (Exception e)
             {
