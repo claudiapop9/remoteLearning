@@ -69,27 +69,5 @@ namespace VendingMachineCodeFirst
 
         }
 
-        public List<Product> GetAllStates()
-        {
-            List<Product> list = new List<Product>();
-            try
-            {
-                using (StreamReader sr = new StreamReader(filePathAll))
-                {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        Product product=JsonConvert.DeserializeObject<Product>(line);
-                        list.Add(product);
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                log.Error("Reading file failed");
-            }
-
-            return list;
         }
-    }
 }

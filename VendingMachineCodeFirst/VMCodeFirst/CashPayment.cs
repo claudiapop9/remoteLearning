@@ -120,7 +120,7 @@ namespace VendingMachineCodeFirst
             }
         }
 
-        public static List<CashMoney> CalculateMinimum(List<CashMoney> coins, double change)
+        private static List<CashMoney> CalculateMinimum(List<CashMoney> coins, double change)
         {
             // used to store the minimum matches
             List<CashMoney> minimalMatch = null;
@@ -145,7 +145,7 @@ namespace VendingMachineCodeFirst
 
             return minimalMatch;
         }
-        public static List<CashMoney> Calculate(List<CashMoney> coins, double change, int start = 0)
+        private static List<CashMoney> Calculate(List<CashMoney> coins, double change, int start = 0)
         {
             for (int i = start; i < coins.Count; i++)
             {
