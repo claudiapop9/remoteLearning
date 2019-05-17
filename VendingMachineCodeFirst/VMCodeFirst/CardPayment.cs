@@ -8,6 +8,7 @@ namespace VendingMachineCodeFirst
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string cardNo;
+        private string pin;
         private bool enough = false;
                 
         public void Pay(double cost)
