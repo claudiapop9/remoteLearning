@@ -6,6 +6,13 @@ using System.Linq;
 
 namespace VendingMachineCodeFirst
 {
+//code review [Teo]: all methods are public, but some are only used within the class
+//Consider not exposing(i.e. marking the methods as private) when they are not called from outside the class
+//this also applies in CashPayment.cs, Data.cs
+
+//code review [Teo]: The naming of the classes: CashPayment, CardPayment, Data does not imply their function too well
+//The word "payment" seems to imply a DTO, not a repository/service class - consider renaming these classes so that their name more
+//strongly implies their role
     class CashPayment : IPayment
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
