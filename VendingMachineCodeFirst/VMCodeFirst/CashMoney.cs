@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace VendingMachineCodeFirst
 {
         
@@ -9,6 +11,7 @@ namespace VendingMachineCodeFirst
 
         public CashMoney() { }
 
+        [JsonConstructor]
         public CashMoney(double moneyValue, int quantity)
         {
             MoneyValue = moneyValue;

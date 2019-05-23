@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace VendingMachineCodeFirst
 {
    
@@ -7,5 +9,15 @@ namespace VendingMachineCodeFirst
         public string CardNO { get; set; }
         public string Pin { get; set; }
         public double Amount { get; set; }
+
+        public Account()
+        { }
+
+        [JsonConstructor]
+        public Account(string CardNo, string Pin)
+        {
+            this.CardNO = CardNo;
+            this.Pin = Pin;
+        }
     }
 }
