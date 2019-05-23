@@ -4,9 +4,41 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VendingMachineWpf"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d" Height="600" Width="1080" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        WindowStyle="None">
+    <StackPanel>
+        <Grid Height="50" VerticalAlignment="Top" Background="#FF4572A0">
+            <Button Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Margin="10 0">
+                <materialDesign:PackIcon Kind="Menu" Width="25" Height="25" />
+            </Button>
+            <TextBlock Text="VendingMachine WPF" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Foreground="White" FontSize="18" />
+        </Grid>
+        <Grid Margin="20,20,0,20" VerticalAlignment="Top" Background="White" Height="512" HorizontalAlignment="Left"
+              Width="1040">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="1" />
+            </Grid.Effect>
+            <ListView Style="{StaticResource VendingList}" ItemsSource="{Binding Items}" Margin="5,5,603,5" Grid.ColumnSpan="2">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <Button DataContext="{Binding}" Style="{StaticResource VendingButton}" DockPanel.Dock="Left" Click="Purchase_Clicked" Background="AliceBlue"></Button>
+                            <StackPanel DockPanel.Dock="Right">
+                                <TextBlock Style="{StaticResource ProductLabel}" Text="{Binding Information.Name}"/>
+                                <TextBlock Style="{StaticResource ProductLabel}" Text="{Binding Information.Price, StringFormat=RON {0:0.00}}" />
+                                <TextBlock Foreground="Red" Text="Out of stock!"
+                                               Visibility="{Binding OutOfStockMessage}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </StackPanel>
 </Window>

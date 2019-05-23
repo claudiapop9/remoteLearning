@@ -4,6 +4,23 @@
              xmlns:local="clr-namespace:VendingMachineWpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style x:Key="TitleBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="48"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="VendingList" TargetType="ListView">
+            <Setter Property="Background" Value="CornflowerBlue"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style x:Key="ProductLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style x:Key="VendingButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
     </Application.Resources>
 </Application>

@@ -7,7 +7,7 @@ using VendingMachineCodeFirst;
 
 namespace BusinessLogic
 {
-    class Controller
+    public class Controller
     {
         private Repository repository=new Repository();
         private PaymentDTO paymentDto=new PaymentDTO();
