@@ -4,13 +4,18 @@ using System;
 
 namespace VendingMachineCodeFirst
 {
-    class CardPayment : IPayment
+    class CardService : IPayment
     {
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private string cardNo;
         private string pin;
-        private bool enough = false;
-                
+
+        public CardService(string cardNo, string pin)
+        {
+            this.cardNo = cardNo;
+            this.pin = pin;
+        }
+
         public void Pay(double cost)
         {
            
@@ -32,7 +37,6 @@ namespace VendingMachineCodeFirst
         }
         public bool IsEnough(double cost)
         {
-            AskDetails();
             try
             {
                 using (var db = new VendMachineDbContext())
@@ -53,24 +57,7 @@ namespace VendingMachineCodeFirst
             }
             return false;
         }
-        private void AskDetails()
-        {
-            
-            Console.WriteLine("CardNo:");
-            string cardNo = Console.ReadLine();
-            Console.WriteLine("PIN:");
-            string pin = Console.ReadLine();
-            if (IsValidCard(cardNo, pin))
-            {
-                this.cardNo = cardNo;
-                this.pin = pin;
-            }
-            else
-            {
-                throw new Exception("Not Valid Credentials");
-            }
-        }
-
+        
         private bool IsValidCard(string cardNumber, string cardPin)
         {
             try

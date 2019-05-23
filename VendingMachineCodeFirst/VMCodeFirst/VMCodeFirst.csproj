@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account.cs" />
-    <Compile Include="CardPayment.cs" />
+    <Compile Include="CardService.cs" />
     <Compile Include="CashMoney.cs" />
-    <Compile Include="CashPayment.cs" />
+    <Compile Include="CashService.cs" />
     <Compile Include="SocketCommunication.cs" />
-    <Compile Include="Controller.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="IPayment.cs" />
     <Compile Include="Migrations\201904071850228_CreateTransactions.cs" />
     <Compile Include="Migrations\201904071850228_CreateTransactions.Designer.cs">
@@ -80,7 +80,6 @@
     <Compile Include="Report.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionManager.cs" />
-    <Compile Include="UI.cs" />
     <Compile Include="VendMachineDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
