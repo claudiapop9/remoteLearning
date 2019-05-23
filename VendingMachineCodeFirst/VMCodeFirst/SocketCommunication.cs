@@ -5,7 +5,7 @@ using System.Text;
 
 namespace VendingMachineCodeFirst
 {
-    class SocketCommunication
+    public class SocketCommunication
     {
         private Socket handler;
 
