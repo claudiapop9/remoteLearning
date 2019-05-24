@@ -25,7 +25,7 @@ namespace VendingMachineCodeFirst
         {
             this.payment = paymentMethod;
         }
-
+       
         public bool BuyProduct(int productId)
         {
             double productPrice = productCollection.GetProductPriceByKey(productId);

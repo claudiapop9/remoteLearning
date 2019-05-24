@@ -10,7 +10,6 @@ namespace VendingMachineCodeFirst
         private static readonly log4net.ILog log =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        List<double> acceptedDenominations = new List<double>() {10, 5, 1, 0.5};
         private List<CashMoney> introducedMoney = new List<CashMoney>();
         double totalMoney = 0;
 
