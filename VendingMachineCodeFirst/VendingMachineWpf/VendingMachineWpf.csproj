@@ -67,9 +67,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\CashMoney.cs" />
     <Compile Include="Models\VendingItem.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="ViewModels\MachineViewModel.cs" />
+    <Compile Include="ViewModels\PaymentViewModel.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

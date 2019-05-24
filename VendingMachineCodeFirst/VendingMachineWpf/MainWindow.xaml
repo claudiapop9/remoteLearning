@@ -7,7 +7,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" Height="600" Width="1080" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         WindowStyle="None">
-    <StackPanel>
+    <StackPanel Margin="0,0,0,1">
         <Grid Height="50" VerticalAlignment="Top" Background="#FF4572A0">
             <Button Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Margin="10 0">
                 <materialDesign:PackIcon Kind="Menu" Width="25" Height="25" />
@@ -28,7 +28,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
-                            <Button DataContext="{Binding}" Style="{StaticResource VendingButton}" DockPanel.Dock="Left" Click="Purchase_Clicked" Background="AliceBlue"></Button>
+                            <Button DataContext="{Binding}" Style="{StaticResource VendingButton}" DockPanel.Dock="Left" Click="PurchaseCash_Clicked" Background="AliceBlue">BUY</Button>
                             <StackPanel DockPanel.Dock="Right">
                                 <TextBlock Style="{StaticResource ProductLabel}" Text="{Binding Information.Name}"/>
                                 <TextBlock Style="{StaticResource ProductLabel}" Text="{Binding Information.Price, StringFormat=RON {0:0.00}}" />
@@ -39,6 +39,20 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <StackPanel>
+                
+            </StackPanel>
+            <Button Style="{StaticResource MoneyButton}" Click="Insert1_Clicked" Margin="437,129,153,349" Grid.Column="1">
+                1 Ron
+            </Button>
+            <Button Style="{StaticResource MoneyButton}" Click="Insert5_Clicked" Margin="285,130,305,349" Grid.Column="1">
+                5 Ron
+            </Button>
+            <Button Style="{StaticResource MoneyButton}" Click="Insert10_Clicked" Grid.Column="1" Margin="134,130,457,348">
+                10 Ron
+            </Button>
+            <TextBlock Style="{StaticResource MoneyLabel}" Text="{Binding Bank.Inserted, StringFormat=Inserted RON\{0:0.00\}}" Margin="188,23,340,462" RenderTransformOrigin="0.505,0.444" Grid.Column="1" />
+            <TextBlock Style="{StaticResource MoneyLabel}" Text="{Binding Bank.Change,  StringFormat=Change RON{0:0.00}}" Margin="187,66,341,419" RenderTransformOrigin="0.505,0.444" Grid.Column="1" />
         </Grid>
     </StackPanel>
 </Window>

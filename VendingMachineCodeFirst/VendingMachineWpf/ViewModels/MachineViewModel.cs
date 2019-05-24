@@ -8,11 +8,14 @@ namespace VendingMachineWpf.ViewModels
 {
     public class MachineViewModel: ObservableObject
     {
+        public string CardCredentials = null;
+        public PaymentViewModel Bank { get; private set; }
         public ObservableCollection<ProductViewModel> Items { get; private set; }
         public Controller ctrl = new Controller();
 
         public MachineViewModel()
         {
+            Bank = new PaymentViewModel();
             Items = GetObservableCollection();
         }
 
@@ -33,5 +36,34 @@ namespace VendingMachineWpf.ViewModels
             }
             return items;
         }
+
+        public void PurchaseCash(object item)
+        {
+            var requestedItem = item as ProductViewModel;
+            string insertedMoney = Bank.GetIntroducedMoney();
+            ctrl.BuyProduct(requestedItem.Id, insertedMoney);
+        }
+
+        public void PurchaseCard(object item)
+        {
+            var requestedItem = item as ProductViewModel;
+            ctrl.BuyProduct(requestedItem.Id, CardCredentials);
+        }
+
+        public void InsertChange(double value)
+        {
+            Bank.Insert(value);
+        }
+
+        public void InsertCredentials(string cardNo, string pin)
+        {
+            var cardCredentials = new
+            {
+                CardNo = cardNo,
+                Pin = pin,
+            };
+            this.CardCredentials = JsonConvert.SerializeObject(cardCredentials);
+        }
+
     }
 }
