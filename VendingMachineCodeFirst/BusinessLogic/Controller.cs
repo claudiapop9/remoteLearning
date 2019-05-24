@@ -29,6 +29,13 @@ namespace BusinessLogic
             return productDto.ListToMap(repository.GetProductsList());
         }
 
+        public bool BuyProduct(int productId,string json)
+        {
+           GetPayment(json);
+           return repository.BuyProduct(productId);
+        }
+
+
         public void Communicate()
         {
             SocketCommunication socketCommunication = new SocketCommunication();
