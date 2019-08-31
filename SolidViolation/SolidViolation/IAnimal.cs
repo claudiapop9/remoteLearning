@@ -1,5 +1,5 @@
 ﻿
-namespace BadOpp
+namespace SolidViolation
 {
     /* Interface Segregation Principle
      -should be more interfaces

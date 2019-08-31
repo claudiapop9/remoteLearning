@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BadOpp
+namespace SolidViolation
 {
     class Dog : IAnimal
     {

@@ -1,4 +1,4 @@
-﻿namespace BadOpp
+﻿namespace SolidViolation
 {
     class Program
     {

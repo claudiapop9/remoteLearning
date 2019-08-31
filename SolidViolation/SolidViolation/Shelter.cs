@@ -1,7 +1,7 @@
 ﻿
 using System.Collections.Generic;
 
-namespace BadOpp
+namespace SolidViolation
 {
     class Shelter
     {

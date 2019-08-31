@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadOpp", "BadOpp\BadOpp.csproj", "{123EBC4E-8714-45E6-8689-42D1424D6478}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidViolation", "SolidViolation\SolidViolation.csproj", "{123EBC4E-8714-45E6-8689-42D1424D6478}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9455B7E5-9318-4690-A921-AEC3101FDEAE}
+		SolutionGuid = {5B7F80C9-6AEC-4964-A49B-95A98A0D7B29}
 	EndGlobalSection
 EndGlobal
