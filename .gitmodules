@@ -1,0 +1,3 @@
+[submodule "VendingMachine"]
+	path = VendingMachine
+	url = https://github.com/claudiapop9/VendingMachine.git
